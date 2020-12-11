@@ -1188,7 +1188,7 @@ iyr:2011 hcl:#866857 hgt:74in
 '''.strip().splitlines()
 
 
-data+=[]
+data+=['']
 
 count=0
 current=categories[:]
