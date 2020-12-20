@@ -20,66 +20,47 @@ for line in data[1].split(','):
 	if time < minimum:
 		minimum=time
 		minimumId=id
-#print(minimum*minimumId)
+print(minimum*minimumId)
 
-import math
 
 def lcm(a, b):
-	return a*b
-	#return abs(a*b) // math.gcd(a, b)
+	import math
+	return abs(a*b) // math.gcd(a, b)
 
 def solve(a, z, b, c):
-	total = 0
+	total = -z
 	while True:
-		if (total - z + c) % b == 0:
+		if (total + c) % b == 0:
 			return total
 		total += a
 
-#def solve2(a, b, c, d, e):
-#	total = 0
-#	while True:
-#		if (total + c) % b == 0 and (total + e) % d == 0:
-#			return total
-#		total += a
+def solve2(a, z, b, c):
+	return solve(a, -z, b, -c)
 
 
 def solveLine(dataLine):
-	lastMultiple = None
-	#change lastOffset to firstOffset?
+	lastMultiple,lastSolve = None, None
 	lastOffset,lastId=None,None
-	output = 0
 
 	for offset, line in enumerate(dataLine.split(',')):
 		if line == 'x': continue
 		id=int(line)
 		if lastOffset is not None:
 			if lastMultiple is not None:
-				output += solve(lastMultiple, 0, id, offset)
+				lastSolve = solve2(lastMultiple, lastSolve, lcm(lastId, id), solve(lastId,lastOffset, id, offset))
 				lastMultiple=lcm(lastMultiple, id)
 			else:
-				output += solve(lastId, lastOffset, id, offset)
+				lastSolve = solve(lastId, lastOffset, id, offset)
 				lastMultiple = lcm(lastId, id)
 		lastOffset=offset
 		lastId=id
 
-	return output
+	return lastSolve
 
-#3417 = 17 * 201 = 13 * 263 - 2 = 180 * 19 - 3
-print(solve(17, 0, 13, 2) + solve(lcm(13, 17), 0, 19, 3) + lcm(13, 17))
 print(3417, solveLine('17,x,13,19'))
-print()
-
-print(solve(67, 0, 7, 1) + solve(lcm(67, 7), 0, 59, 2) + lcm(67, 7) + solve(lcm(lcm(67, 7), 59), 0, 61, 3) + lcm(lcm(67, 7), 59))
 print(754018, solveLine('67,7,59,61'))
-print()
-
 print(1068781, solveLine('7,13,x,x,59,x,31,19'))
-print()
-
-#print(solveLine('19,x,x,x,x,x,x,x,x,41,x,x,x,x,x,x,x,x,x,859,x,x,x,x,x,x,x,23,x,x,x,x,13,x,x,x,17,x,x,x,x,x,x,x,x,x,x,x,29,x,373,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,37'))
-
-#print(solveLine('67,x,7,59,61'))
-#print(solveLine('67,7,x,59,61'))
+print(solveLine('19,x,x,x,x,x,x,x,x,41,x,x,x,x,x,x,x,x,x,859,x,x,x,x,x,x,x,23,x,x,x,x,13,x,x,x,17,x,x,x,x,x,x,x,x,x,x,x,29,x,373,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,37'))
 
 #solveLine(data[1])
 
