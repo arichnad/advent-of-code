@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 
 
-data='''
+data1='''
 '''.strip().splitlines()
-data='''
+data2='''
 '''.strip().splitlines()
+
+data=data1
 
 #data=[int(d) for d in data[0].split(',')]
 
