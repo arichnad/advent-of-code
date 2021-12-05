@@ -706,10 +706,4 @@ for rCount, r in enumerate(rand):
 			print(int(r)* sum([int(board[lastK][j][i]) if not solved[lastK][j][i] else 0 for j in range(5) for i in range(5)]))
 			import sys
 			sys.exit(0)
-	lastR=r
-	import copy
-	lastSolved=copy.deepcopy(solved)
-
-	
-
 
