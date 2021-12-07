@@ -8,7 +8,8 @@ data2='''
 
 data=data1
 
-#data=[int(d) for d in data[0].split(',')]
+#data = [int(line) for line in data[0].split(',')]
+#data = [int(line) for line in data]
 
 #for line in data:
 
