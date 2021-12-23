@@ -8,8 +8,9 @@ data2='''
 
 data=data1
 
-#data = [int(line) for line in data[0].split(',')]
 #data = [int(line) for line in data]
+#data = [[int(column) for column in line] for line in data]
+#data = [[int(column) for column in line.split(',')] for line in data]
 
 #for line in data:
 
