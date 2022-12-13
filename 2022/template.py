@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import math, re, sys, itertools
+import math, re, sys, itertools, functools, copy
 #from sortedcontainers import SortedList #pip3 install sortedcontainers
 from collections import defaultdict, deque, Counter
 
