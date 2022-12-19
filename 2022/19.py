@@ -58,6 +58,7 @@ data = [[int(column) for column in re.findall('-?[\d]+', line)] for line in data
 #data = [[int(column) for column in line.split(',')] for line in data]
 
 def add(cur, robots, addition):
+	#adds to the set, but makes sure to keep only the best values
 	newCur=set()
 	addMe=True
 	for value in cur[robots] if robots in cur else []:
@@ -83,6 +84,7 @@ for line in data:
 		cur={}
 		for robots in prev.keys():
 			for have in prev[robots]:
+				#performance hack:  if we can afford a geode robot, always buy it now, and try nothing else
 				buy=3
 				if sum([have[i]>=cost[buy][i] for i in range(4)])==4:
 					newRobots=list(robots)
@@ -91,8 +93,12 @@ for line in data:
 					newHave = tuple([have[i]+robots[i]-cost[buy][i] for i in range(4)])
 					add(cur, newRobots, newHave)
 					continue
+				
+				#try to buy nothing
 				newHave=tuple(have[i]+robots[i] for i in range(4))
 				add(cur, robots, newHave)
+				
+				#try to buy each robot except the geode robot
 				for buy in range(3):
 					if sum([have[i]>=cost[buy][i] for i in range(4)])!=4:
 						continue
