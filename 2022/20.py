@@ -5031,7 +5031,7 @@ data=data2
 #		if originalPos!=originalPos2:
 #			continue
 #		del data[i]
-#		data.insert((i+d+len(data))%len(data), (originalPos2,d))
+#		data.insert((i+d)%len(data), (originalPos2,d))
 #		break
 #
 #for i in range(len(data)):
@@ -5047,7 +5047,7 @@ for n in range(10):
 			if originalPos!=originalPos2:
 				continue
 			del data[i]
-			data.insert((i+d+len(data))%len(data), (originalPos2,d))
+			data.insert((i+d)%len(data), (originalPos2,d))
 			break
 print(data)
 
