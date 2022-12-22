@@ -8,9 +8,9 @@ import math, re, sys, itertools, functools, copy
 
 data1='''
 
-'''.strip().splitlines()
+'''.strip('\n').splitlines()
 data2='''
-'''.strip().splitlines()
+'''.strip('\n').splitlines()
 
 data=data1
 
