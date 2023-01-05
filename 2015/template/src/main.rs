@@ -7,14 +7,15 @@ use std::str::Lines;
 
 use regex::Regex;
 
+//noinspection DuplicatedCode
 fn main() {
 
-	let data1 : Lines = "
+	let data1 = "
 
-".trim_matches('\n').lines();
-	let data2 : Lines = "
+".trim_matches('\n').lines().collect::<Vec<&str>>();
+	let data2 = "
 
-".trim_matches('\n').lines();
+".trim_matches('\n').lines().collect::<Vec<&str>>();
 
 
 	let data = data1;
@@ -25,7 +26,7 @@ fn main() {
 	//let parsed: Vec<Vec<i32>> = data.map(|line| line.split_whitespace().map(|column| column.parse::<i32>().expect("need an integer")).collect()).collect();
 	//let parsed: Vec<Vec<i32>> = data.map(|line| line.split(',').map(|column| column.parse::<i32>().expect("need an integer")).collect()).collect();
 
-	for line in parsed {
+	for line in &parsed {
 
 	}
 }
