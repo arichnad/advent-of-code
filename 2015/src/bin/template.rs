@@ -10,12 +10,12 @@ use regex::Regex;
 //noinspection DuplicatedCode
 fn main() {
 
-	let data1 = "
+	let data1 = r#"
 
-".trim_matches('\n').lines().collect::<Vec<&str>>();
-	let data2 = "
+"#.trim_matches('\n').lines().collect::<Vec<&str>>();
+	let data2 = r#"
 
-".trim_matches('\n').lines().collect::<Vec<&str>>();
+"#.trim_matches('\n').lines().collect::<Vec<&str>>();
 
 
 	let data = data1;
