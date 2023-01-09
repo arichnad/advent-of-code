@@ -350,5 +350,23 @@ fn main() {
 		total += line.len() as i32 - out;
 	}
 	println!("{}", total);
+	let mut total : i32 = 0;
+	for line in &parsed {
+		let mut out : i32 = 2;
+		let mut chars = line.chars();
+		loop {
+			let ch = chars.next();
+			if ch.is_none() {
+				break;
+			}
+			let ch = ch.unwrap();
+			if ch == '\\' || ch == '"' {
+				out+=1;
+			}
+			out+=1;
+		}
+		total += out - line.len() as i32;
+	}
+	println!("{}", total);
 }
 
