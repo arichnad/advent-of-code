@@ -1,11 +1,12 @@
 
-#![allow(dead_code, unused)]
+#![allow(dead_code, unused, non_snake_case)]
 
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::str::Lines;
 
 use regex::Regex;
+use serde_json::to_string;
 
 //noinspection DuplicatedCode
 fn main() {
@@ -25,6 +26,7 @@ fn main() {
 	//let parsed: Vec<i32> = data.iter().map(|line| line.parse::<i32>().expect("need an integer")).collect();
 	//let parsed: Vec<Vec<i32>> = data.iter().map(|line| line.split_whitespace().map(|column| column.parse::<i32>().expect("need an integer")).collect()).collect();
 	//let parsed: Vec<Vec<i32>> = data.iter().map(|line| line.split(',').map(|column| column.parse::<i32>().expect("need an integer")).collect()).collect();
+	//json: println!("{}", to_string(&data).unwrap());
 
 	for line in &parsed {
 
