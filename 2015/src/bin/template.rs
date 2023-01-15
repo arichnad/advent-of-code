@@ -7,6 +7,7 @@ use std::str::Lines;
 
 use regex::Regex; //for back references:  use fancy_regex::Regex;
 use serde_json::{to_string, from_str, Value};
+use itertools::Itertools; //collect_tuple
 
 //noinspection DuplicatedCode
 fn main() {
