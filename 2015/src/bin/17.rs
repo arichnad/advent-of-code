@@ -51,19 +51,33 @@ fn main() {
 	//let mut data: Vec<Vec<i32>> = data.iter().map(|line| line.split(',').map(|column| column.parse::<i32>().expect("need an integer")).collect()).collect();
 	//json: println!("{} {}", to_string(&data).unwrap(), from_str::<Value>(&data[0]).unwrap());
 
+	let mut answer = 0;
+	for mut i in 0i32..1<<data.len() {
+		let mut total = 0;
+		for j in 0..data.len() {
+			if i&1==1 {
+				total+=data[j];
+			}
+			i>>=1;
+		}
+		if total==TOTAL {
+			answer+=1;
+		}
+	}
+	println!("{}", answer);
+
 	for containers in 1..data.len() {
 		let mut answer = 0;
-		for i in 0i32..1<<data.len() {
+		for mut i in 0i32..1<<data.len() {
 			if i.count_ones() != containers as u32 {
 				continue;
 			}
-			let mut cur = i;
 			let mut total = 0;
 			for j in 0..data.len() {
-				if cur&1==1 {
+				if i&1==1 {
 					total+=data[j];
 				}
-				cur>>=1;
+				i>>=1;
 			}
 			if total==TOTAL {
 				answer+=1;
