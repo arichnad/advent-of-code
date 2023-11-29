@@ -30,6 +30,7 @@ data=data1
 #dir=(dir+4)%4
 #dx,dy=[(1,0),(0,1),(-1,0),(0,-1)][dir] #clockwise, starting right
 #dir=1 if dy==1 else 3 if dx==0 else 0 if dx==1 else 2 #clockwise, starting right
+#dir = "rdlu".find(ch.lower())
 
 #data = [[column for column in line] for line in data]
 #W,H=len(data[0]), len(data)
