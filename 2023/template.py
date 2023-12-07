@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import math, re, sys, itertools, functools, copy, json
+import math, re, sys, itertools, functools, copy, json, threading
 #from sortedcontainers import SortedList #python3 -mpip install install sortedcontainers #SortedList('bat') + 'cat'
 #from astar.search import AStar #python3 -mpip install python-astar #print(AStar([[0]]).search((0,0), (0,0)))
 #from collections import defaultdict, deque, Counter
@@ -20,6 +20,7 @@ data=data1
 #data = [[int(column) for column in line] for line in data]
 #data = [[int(column) for column in line.split(',')] for line in data]
 #data = [[column for column in line] for line in data]
+#data = [threading.Thread(target=lambda line: print(line), args=(line)) for line in data] #line.start() line.join()
 
 
 #for line in data:
