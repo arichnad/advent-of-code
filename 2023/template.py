@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import math, re, sys, itertools, functools, copy, json, threading
+sys.setrecursionlimit(100000)
 #from sortedcontainers import SortedList #python3 -mpip install install sortedcontainers #SortedList('bat') + 'cat'
 #from astar import AStar #python3 -mpip install astar #see astarExample.py
 #from collections import defaultdict, deque, Counter
@@ -21,6 +22,7 @@ data=data1
 #data = [[int(column) for column in line.split(',')] for line in data]
 #data = [[column for column in line] for line in data]
 #data = [threading.Thread(target=lambda line: print(line), args=(line)) for line in data] #line.start() line.join()
+W,H=len(data[0]),len(data)
 
 
 #for line in data:
