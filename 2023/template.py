@@ -6,6 +6,7 @@ sys.setrecursionlimit(100000)
 #from astar import AStar #python3 -mpip install astar #see astarExample.py
 #from collections import defaultdict, deque, Counter
 #from z3 import * #python3 -mpip install install z3 z3-solver #s = Solver(); x = Int('x'); y = Int('y'); s.add(x < 10); print(s, s.check(), s.model() if s.check()==sat else '')
+#from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
 
@@ -22,7 +23,7 @@ data=data1
 #data = [[int(column) for column in line.split(',')] for line in data]
 #data = [[column for column in line] for line in data]
 #data = [threading.Thread(target=lambda line: print(line), args=(line)) for line in data] #line.start() line.join()
-W,H=len(data[0]),len(data)
+# W,H=len(data[0]),len(data)
 
 
 #for line in data:
