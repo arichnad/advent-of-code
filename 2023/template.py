@@ -1,12 +1,14 @@
 #!/usr/bin/python3
 
-import math, re, sys, itertools, functools, copy, json, threading
+import math, re, sys, itertools, functools, copy, json, threading, numpy
 sys.setrecursionlimit(100000)
 #from sortedcontainers import SortedList #python3 -mpip install install sortedcontainers #SortedList('bat') + 'cat'
 #from astar import AStar #python3 -mpip install astar #see astarExample.py
 #from collections import defaultdict, deque, Counter
-#from z3 import * #python3 -mpip install install z3 z3-solver #s = Solver(); x = Int('x'); y = Int('y'); s.add(x < 10); print(s, s.check(), s.model() if s.check()==sat else '')
-#from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install pypy3-dev libgeos-dev && python3 -mpip install shapely
+#from z3 import * #python3 -mpip install install z3 z3-solver # s = Solver(); x = Int('x'); y = Real('y'); s.add([x <= 10, x >= 10]); print(s); print(s.check()) # if s.check()==z3.sat: print(int(str(s.model()[x])))
+#import lmfit #sudo apt install python3-dev pypy3-dev libopenblas-dev gfortran && python3 -mpip install lmfit
+#from sympy import * #python3 -mpip install sympy # x,y=symbols('x y'); print(solve([x <= 10, x >= 10]))
+#from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
 
