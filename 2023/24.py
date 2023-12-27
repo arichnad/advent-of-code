@@ -365,7 +365,7 @@ equations=[]
 # 	y0 >= start, y0 <= end,
 # 	z0 >= start, z0 <= end,
 # ]
-for i, line in enumerate(data):
+for i, line in enumerate(data[:3]):
 	(x1, y1, z1, dx1, dy1, dz1) = line
 	tVariable = Real('t' + str(i))
 	equations += [
