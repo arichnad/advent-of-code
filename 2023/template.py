@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import math, re, sys, itertools, functools, copy, json, threading, numpy
+#sudo apt install python3-dev pypy3-dev python3-sortedcontainers python3-z3 python3-sympy python3-shapely python3-numpy
 sys.setrecursionlimit(100000)
 #from sortedcontainers import SortedList #python3 -mpip install install sortedcontainers #SortedList('bat') + 'cat'
 #from astar import AStar #python3 -mpip install astar #see astarExample.py
@@ -33,13 +34,13 @@ data=data1
 
 
 
-#dir=(dir+4)%4
-#dx,dy=[(1,0),(0,1),(-1,0),(0,-1)][dir] #clockwise, starting right
-#dir=1 if dy==1 else 3 if dx==0 else 0 if dx==1 else 2 #clockwise, starting right
-#dir = "rdlu".find(ch.lower())
+#dir = (dir+4)%4
+#dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][dir] #clockwise, starting right
+#dir = 1 if dy==1 else 3 if dx==0 else 0 if dx==1 else 2 #clockwise, starting right
+#dir = "rdlu".find(ch.lower()) #clockwise, starting right
+#dir = ">v<^".find(ch.lower()) #clockwise, starting right
 
 #data = [[column for column in line] for line in data]
-#W,H=len(data[0]), len(data)
 #for j in range(H):
 #	for i in range(W):
 #		for dy in range(-1, 2):
