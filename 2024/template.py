@@ -21,7 +21,7 @@ data2='''
 data=data1
 
 #data = [int(line) for line in data]
-#data = [[int(column) for column in re.findall('-?[\d]+', line)] for line in data]
+#data = [[int(column) for column in re.findall('-?[\\d]+', line)] for line in data]
 #data = [[int(column) for column in line] for line in data]
 #data = [[int(column) for column in line.split(',')] for line in data]
 #data = [[column for column in line] for line in data]
