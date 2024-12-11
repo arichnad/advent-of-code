@@ -7,6 +7,7 @@ from collections import defaultdict, deque, Counter
 data1='''
 '''.strip().splitlines()
 data2='''
+
 '''.strip().splitlines()
 
 data=data1

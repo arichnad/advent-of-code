@@ -11,17 +11,7 @@ import math, re, sys, itertools, functools, copy, json
 # Distance:  9  40  200
 # '''.strip('\n').splitlines()
 # data2='''
-# Time:        48     93     85     95
-# Distance:   296   1928   1236   1391
-# '''.strip('\n').splitlines()
 
-data1='''
-Time:      71530
-Distance:  940200
-'''.strip('\n').splitlines()
-data2='''
-Time:        48938595
-Distance:   296192812361391
 '''.strip('\n').splitlines()
 
 data=data2

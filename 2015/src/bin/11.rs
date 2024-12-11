@@ -16,7 +16,7 @@ abcdefgh
 ghijklmn
 "#.trim_matches('\n').lines().map(ToString::to_string).collect::<Vec<String>>();
 	let data2 = r#"
-hxbxwxba
+
 "#.trim_matches('\n').lines().map(ToString::to_string).collect::<Vec<String>>();
 
 

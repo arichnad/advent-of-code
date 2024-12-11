@@ -14,7 +14,6 @@ fn main() {
 abcdef
 ".trim_matches('\n').lines().collect::<Vec<&str>>();
 	let data2 = "
-bgvyzdsv
 ".trim_matches('\n').lines().collect::<Vec<&str>>();
 
 

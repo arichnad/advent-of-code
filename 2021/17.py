@@ -5,7 +5,7 @@ data1='''
 target area: x=20..30, y=-10..-5
 '''.strip().splitlines()
 data2='''
-target area: x=175..227, y=-134..-79
+
 '''.strip().splitlines()
 
 data=data2

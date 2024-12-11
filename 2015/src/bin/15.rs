@@ -17,10 +17,7 @@ Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8
 Cinnamon: capacity 2, durability 3, flavor -2, texture -1, calories 3
 "#.trim_matches('\n').lines().map(ToString::to_string).collect::<Vec<String>>();
 	let data2 = r#"
-Sugar: capacity 3, durability 0, flavor 0, texture -3, calories 2
-Sprinkles: capacity -3, durability 3, flavor 0, texture 0, calories 9
-Candy: capacity -1, durability 0, flavor 4, texture 0, calories 1
-Chocolate: capacity 0, durability 0, flavor -2, texture 2, calories 8
+
 "#.trim_matches('\n').lines().map(ToString::to_string).collect::<Vec<String>>();
 
 

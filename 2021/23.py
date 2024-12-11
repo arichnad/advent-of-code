@@ -9,29 +9,7 @@ data1='''
   #########
 '''.strip().splitlines()
 data2='''
-#############
-#...........#
-###A#D#C#A###
-  #C#D#B#B#
-  #########
-'''.strip().splitlines()
-data3='''
-#############
-#...........#
-###B#C#B#D###
-  #D#C#B#A#
-  #D#B#A#C#
-  #A#D#C#A#
-  #########
-'''.strip().splitlines()
-data4='''
-#############
-#...........#
-###A#D#C#A###
-  #D#C#B#A#
-  #D#B#A#C#
-  #C#D#B#B#
-  #########
+
 '''.strip().splitlines()
 
 data=data4 #1.6 10 23

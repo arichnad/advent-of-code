@@ -5,7 +5,6 @@ data='''
 0,3,6
 '''.strip().splitlines()
 data='''
-6,19,0,5,7,13,1
 '''.strip().splitlines()
 
 

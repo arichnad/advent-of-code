@@ -15,7 +15,7 @@ fn main() {
 1
 "#.trim_matches('\n').lines().map(ToString::to_string).collect::<Vec<String>>();
 	let data2 = r#"
-1113122113
+
 "#.trim_matches('\n').lines().map(ToString::to_string).collect::<Vec<String>>();
 
 

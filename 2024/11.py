@@ -14,62 +14,27 @@ sys.setrecursionlimit(100000)
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
-COM)B
-B)C
-C)D
-D)E
-E)F
-B)G
-G)H
-D)I
-E)J
-J)K
-K)L
-K)YOU
-I)SAN
+
 '''.strip('\n').splitlines()
 data2='''
 
 '''.strip('\n').splitlines()
 
-data=data2
+data=data1
 
 #data = [int(line) for line in data]
-data = [[column for column in re.findall('-?[^)]+', line)] for line in data]
+#data = [[int(column) for column in re.findall('-?[\\d]+', line)] for line in data]
 #data = [[int(column) for column in line] for line in data]
 #data = [[int(column) for column in line.split(',')] for line in data]
 #data = [[column for column in line] for line in data]
 #data = [threading.Thread(target=lambda line: print(line), args=(line)) for line in data] #line.start() line.join()
 # W,H=len(data[0]),len(data)
 
-d={}
-for line in data:
-    # if line[1] not in d:
-    #     d[line[1]]=[]
-    d[line[1]] = line[0]
 
-# for i in d:
-#     while i!='COM':
-#         i=d[i]
-#         answer+=1
-# print(answer)
+#for line in data:
 
-e={}
-i=d['YOU']
-dist=0
-while i!='COM':
-    e[i]=dist
-    dist+=1
-    i=d[i]
 
-i=d['SAN']
-dist=0
-while i!='COM':
-    if i in e:
-        print(dist+e[i])
-        break
-    dist+=1
-    i=d[i]
+
 
 #dir = (dir+4)%4
 #dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][dir] #clockwise, starting right

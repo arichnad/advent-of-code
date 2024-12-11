@@ -7,8 +7,9 @@ from collections import defaultdict, deque, Counter
 data1='''
 245182-790572
 '''.strip().splitlines()
-#data2='''
-#'''.strip().splitlines()
+data2='''
+
+'''.strip().splitlines()
 
 data=[int(x) for x in data1[0].split('-')]
 
