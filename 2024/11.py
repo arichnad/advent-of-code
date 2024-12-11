@@ -14,27 +14,67 @@ sys.setrecursionlimit(100000)
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
-
+125 17
 '''.strip('\n').splitlines()
 data2='''
 
 '''.strip('\n').splitlines()
 
-data=data1
+data=data2
 
-#data = [int(line) for line in data]
-#data = [[int(column) for column in re.findall('-?[\\d]+', line)] for line in data]
+# data = [int(line) for line in data]
+data = [[int(column) for column in re.findall('-?[\\d]+', line)] for line in data]
 #data = [[int(column) for column in line] for line in data]
 #data = [[int(column) for column in line.split(',')] for line in data]
 #data = [[column for column in line] for line in data]
 #data = [threading.Thread(target=lambda line: print(line), args=(line)) for line in data] #line.start() line.join()
 # W,H=len(data[0]),len(data)
 
+# data=data[0]
+# for i in range(25):
+# 	out = []
+# 	for line in data:
+# 		s=str(line)
+# 		if line==0:
+# 			out.append(1)
+# 		elif len(s)%2==0:
+# 			a,b=s[:len(s)//2],s[len(s)//2:]
+# 			out.append(int(a))
+# 			out.append(int(b))
+# 		else:
+# 			out.append(line*2024)
+# 	data=out
+# 	print(len(data))
+# print(len(data))
+out={}
+for i in data[0]:
+	out[i] = 1
+data=out
 
-#for line in data:
-
-
-
+for i in range(75):
+	out = {}
+	for line in data.keys():
+		count=data[line]
+		s=str(line)
+		if line==0:
+			if 1 not in out:
+				out[1]=0
+			out[1]+=count
+		elif len(s)%2==0:
+			a,b=int(s[:len(s)//2]),int(s[len(s)//2:])
+			if a not in out:
+				out[a] = 0
+			out[a] += count
+			if b not in out:
+				out[b]=0
+			out[b]+=count
+		else:
+			if line*2024 not in out:
+				out[line*2024]=0
+			out[line*2024]+=count
+	data=out
+	print(i, data, sum(data.values()))
+print(sum(data.values()))
 
 #dir = (dir+4)%4
 #dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][dir] #clockwise, starting right
