@@ -14,25 +14,115 @@ sys.setrecursionlimit(100000)
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
-
+AAAAAA
+AAABBA
+AAABBA
+ABBAAA
+ABBAAA
+AAAAAA
 '''.strip('\n').splitlines()
 data2='''
 
 '''.strip('\n').splitlines()
 
-data=data1
+data=data2
 
 #data = [int(line) for line in data]
 #data = [[int(column) for column in re.findall('-?[\\d]+', line)] for line in data]
 #data = [[int(column) for column in line] for line in data]
 #data = [[int(column) for column in line.split(',')] for line in data]
-#data = [[column for column in line] for line in data]
+data = [[column for column in line] for line in data]
 #data = [threading.Thread(target=lambda line: print(line), args=(line)) for line in data] #line.start() line.join()
-# W,H=len(data[0]),len(data)
+W,H=len(data[0]),len(data)
+visited=set()
 
 
+# def _(j, i):
+# 	if (j, i) in visited: return (0, 0)
+# 	visited.add((j, i))
+# 	ch=data[j][i]
+# 	perim=0
+# 	area=1
+# 	for dy in range(-1, 2):
+# 		for dx in range(-1, 2):
+# 			if dx==0 and dy==0 or dx!=0 and dy!=0: continue
+# 			newY,newX=j+dy,i+dx
+# 			if newY<0 or newX<0 or newY>=H or newX>=W:
+# 				perim+=1
+# 				continue
+# 			if data[newY][newX] != ch:
+# 				perim+=1
+# 				continue
+# 			(p,a) = _(newY, newX)
+# 			perim+=p
+# 			area+=a
+# 	return (perim, area)
+# #for line in data:
+# answer=0
+# for j in range(H):
+# 	for i in range(W):
+# 		if (j, i) in visited: continue
+# 		(p,a)=_(j, i)
+# 		answer+=p*a
+# 		print(data[j][i], p*a)
+# print(answer)
+
+def _(j, i):
+	if (j, i) in visited: return (set(), 0)
+	visited.add((j, i))
+	ch=data[j][i]
+	perim=set()
+	area=1
+	for dy in range(-1, 2):
+		for dx in range(-1, 2):
+			if dx==0 and dy==0 or dx!=0 and dy!=0: continue
+			newY,newX=j+dy,i+dx
+			if newY<0 or newX<0 or newY>=H or newX>=W or data[newY][newX] != ch:
+				# if dx<0 or dy<0:
+				# 	perim.add((newY, newX, -dy, -dx))
+				# else:
+				perim.add((j, i, dy, dx))
+				continue
+			(p,a) = _(newY, newX)
+			for p in p: perim.add(p)
+			area+=a
+	return (perim, area)
 #for line in data:
+answer=0
+for j in range(H):
+	for i in range(W):
+		if (j, i) in visited: continue
+		(p,a)=_(j, i)
+		total = 0
+		for dy in [-1, 1]:
+			for j2 in range(-1, H+1):
+				on = False
+				for i2 in range(-1, W+1):
+					x=(j2, i2, dy, 0)
+					if x not in p:
+						on = False
+						continue
+					if not on:
+						print(x)
+						total += 1
+					on=True
+		for dx in [-1, 1]:
+			for i2 in range(-1, W+1):
+				on = False
+				for j2 in range(-1, H+1):
+					x=(j2, i2, 0, dx)
+					if x not in p:
+						on = False
+						continue
+					if not on:
+						print(x)
+						total += 1
+					on=True
 
+
+		answer+=total*a
+		print(data[j][i], a, total, total*a)
+print(answer) #913094
 
 
 
