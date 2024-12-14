@@ -14,16 +14,28 @@ sys.setrecursionlimit(100000)
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
-
+p=0,4 v=3,-3
+p=6,3 v=-1,-3
+p=10,3 v=-1,2
+p=2,0 v=2,-1
+p=0,0 v=1,3
+p=3,0 v=-2,-2
+p=7,6 v=-1,-3
+p=3,0 v=-1,-2
+p=9,3 v=2,3
+p=7,3 v=-1,2
+p=2,4 v=2,-3
+p=9,5 v=-3,-3
 '''.strip('\n').splitlines()
 data2='''
 
 '''.strip('\n').splitlines()
 
-data=data1
+# data=data1;W=11;H=7
+data=data2;W=101;H=103
 
 #data = [int(line) for line in data]
-#data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]
+data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]
 #data = [[int(column) for column in line] for line in data]
 #data = [[int(column) for column in line.split(',')] for line in data]
 #data = [[column for column in line] for line in data]
@@ -31,10 +43,66 @@ data=data1
 # W,H=len(data[0]),len(data)
 
 
-#for line in data:
+# for time in range(100):
+#     for i in range(len(data)):
+#         data[i][0] += data[i][2]
+#         data[i][1] += data[i][3]
+#
+# ans = [0, 0, 0, 0]
+# for i in range(len(data)):
+#     data[i][0] %= W
+#     data[i][1] %= H
+#     if data[i][0] < W // 2:
+#         q = 0
+#     elif data[i][0] > W // 2:
+#         q = 1
+#     else:
+#         continue
+#
+#     if data[i][1] < H // 2:
+#         q += 0
+#     elif data[i][1] > H // 2:
+#         q += 2
+#     else:
+#         continue
+#
+#     ans[q] += 1
+# print(ans)
+# print(ans[0] * ans[1] * ans[2] * ans[3])
+best=None
+for time in range(10000):
+    for i in range(len(data)):
+        data[i][0] += data[i][2]
+        data[i][1] += data[i][3]
 
 
+    ans = [0, 0, 0, 0]
+    for i in range(len(data)):
+        data[i][0] %= W
+        data[i][1] %= H
+        if data[i][0] < W // 2:
+            q = 0
+        elif data[i][0] > W // 2:
+            q = 1
+        else:
+            continue
 
+        if data[i][1] < H // 2:
+            q += 0
+        elif data[i][1] > H // 2:
+            q += 2
+        else:
+            continue
+
+        ans[q] += 1
+    ans = ans[0] * ans[1] * ans[2] * ans[3]
+    if best is None or ans < best:
+        # b = [[0 for i in range(W)] for j in range(H)]
+        # for line in data: b[line[1] % H][line[0] % W] += 1
+        # for line in b: print(''.join([str(i) if i>0 else ' ' for i in line]))
+        best,bestTime=ans,time+1
+
+print(bestTime)
 
 #dir = (dir+4)%4
 #dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][dir] #clockwise, starting right
