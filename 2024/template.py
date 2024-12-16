@@ -22,17 +22,15 @@ data2='''
 
 data=data1
 
-#data = [int(line) for line in data]
-#data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]
-#data = [[int(column) for column in line] for line in data]
-#data = [[int(column) for column in line.split(',')] for line in data]
-#data = [[column for column in line] for line in data]
-#data = [threading.Thread(target=lambda line: print(line), args=(line)) for line in data] #line.start() line.join()
-# W,H=len(data[0]),len(data)
+# data = [int(line) for line in data]; H=len(data)
+# data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]; W,H=len(data[0]),len(data)
+# data = [[int(column) for column in line] for line in data]; W,H=len(data[0]),len(data)
+# data = [[int(column) for column in line.split(',')] for line in data]; W,H=len(data[0]),len(data)
+# data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
+# data = [threading.Thread(target=lambda line: print(line), args=(line)) for line in data] #line.start() line.join()
 
 
 #for line in data:
-
 
 
 
@@ -56,3 +54,31 @@ data=data1
 #
 #for line in data: print(''.join(line))
 
+# positions = [(0, startX, startY)]
+# costs={}
+# while len(positions) > 0:
+# 	newPositions = []
+# 	for (cost, x, y) in sorted(positions):
+# 		if data[y][x] == '#': continue
+# 		if (x, y) in costs and cost >= costs[(x, y)]: continue
+# 		costs[(x, y)] = cost
+#
+# 		newPositions.append((cost + 1, x + 1, y))
+# 		newPositions.append((cost + 1, x - 1, y))
+# 		newPositions.append((cost + 1, x, y - 1))
+# 		newPositions.append((cost + 1, x, y + 1))
+# 	positions=newPositions
+# print(costs[(endX, endY)])
+
+# # flood fill does NOT work when want a breadth first (minimum cost, that sort of thing)
+# visited=set()
+# def ff(x, y):
+# 	if y<0 or x<0 or y>=H or x>=W: return
+# 	if data[y][x] == '#' or (x, y) in visited: return
+# 	visited.add((x, y))
+# 	ff(x + 1, y)
+# 	ff(x - 1, y)
+# 	ff(x, y + 1)
+# 	ff(x, y - 1)
+#
+# ff(startX, startY)
