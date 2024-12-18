@@ -14,23 +14,71 @@ sys.setrecursionlimit(100000)
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
-
+5,4
+4,2
+4,5
+3,0
+2,1
+6,3
+2,4
+1,5
+0,6
+3,3
+2,6
+5,1
+1,2
+5,5
+2,5
+6,5
+1,4
+0,4
+6,4
+1,1
+6,1
+1,0
+0,5
+1,6
+2,0
 '''.strip('\n').splitlines()
 data2='''
 
 '''.strip('\n').splitlines()
 
-data=data1
+# data=data1[0:12];W=7;H=7
+# data=data2[0:1024];W=71;H=71
+# data=data1;W=7;H=7
+data=data2;W=71;H=71
 
 # data = [int(line) for line in data]; H=len(data)
-# data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]; W,H=len(data[0]),len(data)
+data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]; #W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line] for line in data]; W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line.split(',')] for line in data]; W,H=len(data[0]),len(data)
 # data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
 # data = [threading.Thread(target=lambda line: print(line), args=(line)) for line in data] #line.start() line.join()
 
+b=[[False for i in range(W)] for j in range(H)]
 
-#for line in data:
+for i in range(len(data)):
+	print(i)
+	b[data[i][0]][data[i][1]] = True
+	positions = [(0, 0, 0)]
+	costs={}
+	while len(positions) > 0:
+		newPositions = []
+		for (cost, x, y) in sorted(positions):
+			if y<0 or y>=H or x<0 or x>=W: continue
+			if b[y][x]: continue
+			if (x, y) in costs and cost >= costs[(x, y)]: continue
+			costs[(x, y)] = cost
+
+			newPositions.append((cost + 1, x + 1, y))
+			newPositions.append((cost + 1, x - 1, y))
+			newPositions.append((cost + 1, x, y - 1))
+			newPositions.append((cost + 1, x, y + 1))
+		positions=newPositions
+	if (W-1, H-1) not in costs:
+		print(data[i][0], data[i][1])
+		break
 
 
 
@@ -58,10 +106,10 @@ data=data1
 # costs={}
 # while len(positions) > 0:
 # 	newPositions = []
-# 	for (cost, x, y) in sorted(positions): #remove sorted here if it's not needed
+# 	for (cost, x, y) in sorted(positions):
 #		if y<0 or y>=H or x<0 or x>=W: continue
 # 		if data[y][x] == '#': continue
-# 		if (x, y) in costs and cost >= costs[(x, y)]: continue #change >= here to > if you need to analyze ties
+# 		if (x, y) in costs and cost >= costs[(x, y)]: continue
 # 		costs[(x, y)] = cost
 #
 # 		newPositions.append((cost + 1, x + 1, y))
