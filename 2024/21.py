@@ -14,13 +14,17 @@ sys.setrecursionlimit(100000)
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
-
+029A
+980A
+179A
+456A
+379A
 '''.strip('\n').splitlines()
 data2='''
 
 '''.strip('\n').splitlines()
 
-data=data1
+data=data2
 
 # data = [int(line) for line in data]; H=len(data)
 # data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]; W,H=len(data[0]),len(data)
@@ -30,10 +34,162 @@ data=data1
 # data = [threading.Thread(target=lambda line: print(line), args=(line)) for line in data] #line.start() line.join()
 
 
-#for line in data:
+def d(pos0, pos1, bad):
+	if pos0==pos1: return set('A')
+	dx,dy=pos1[0]-pos0[0],pos1[1]-pos0[1]
+	if dx!=0: dx//=abs(dx)
+	if dy!=0: dy//=abs(dy)
+	a,b = None,None
+	if dx != 0:
+		if (pos0[0] + dx, pos0[1]) != bad:
+			first = '<' if dx < 0 else '>'
+			aIn=d((pos0[0] + dx, pos0[1]), pos1, bad)
+			a=set()
+			for x in aIn: a.add(first+x)
+	if dy != 0:
+		if (pos0[0], pos0[1] + dy) != bad:
+			first = '^' if dy < 0 else 'v'
+			bIn=d((pos0[0], pos0[1] + dy), pos1, bad)
+			b = set()
+			for x in bIn: b.add(first + x)
+	if a is None: return b
+	if b is None: return a
+	return a|b
 
 
+def p(ch):
+	if ch == '7': return (0, 0)
+	if ch == '8': return (1, 0)
+	if ch == '9': return (2, 0)
 
+	if ch == '4': return (0, 1)
+	if ch == '5': return (1, 1)
+	if ch == '6': return (2, 1)
+
+	if ch == '1': return (0, 2)
+	if ch == '2': return (1, 2)
+	if ch == '3': return (2, 2)
+
+	if ch == '0': return (1, 3)
+	if ch == 'A': return (2, 3)
+
+
+def q(ch):
+	if ch == '^': return (1, 0)
+	if ch == 'A': return (2, 0)
+
+	if ch == '<': return (0, 1)
+	if ch == 'v': return (1, 1)
+	if ch == '>': return (2, 1)
+
+# answer=0
+# R=2
+# for line in data:
+# 	pos=(2,3)
+# 	a=set()
+# 	for ch in line:
+# 		add=d(pos, p(ch), (0, 3))
+# 		pos = p(ch)
+# 		if len(a)==0:
+# 			a=add
+# 		else:
+# 			aIn = a
+# 			a = set()
+# 			for x in aIn:
+# 				for y in add: a.add(x+y)
+# 	out=a
+# 	for r in range(R):
+# 		outIn=out
+# 		out=set()
+# 		for xx in outIn:
+# 			pos=(2, 0)
+# 			a=set()
+# 			for ch in xx:
+# 				add=d(pos, q(ch), (0, 0))
+# 				pos = q(ch)
+# 				if len(a) == 0:
+# 					a = add
+# 				else:
+# 					aIn = a
+# 					a = set()
+# 					for x in aIn:
+# 						for y in add: a.add(x + y)
+# 			out|=a
+#
+# 	m, n = None, None
+# 	for xx in out:
+# 		if m is None or len(xx) < m:
+# 			m, n = len(xx), xx
+# 	print(line, m, int(line.replace('A','')))
+# 	answer += m * int(line.replace('A',''))
+#
+# print(answer)
+R=25
+
+firstMapping={}
+for pos0 in ((1, 0), (2, 0), (0, 1), (1, 1), (2, 1)):
+	for pos1 in ((1, 0), (2, 0), (0, 1), (1, 1), (2, 1)):
+		add=d(pos0, pos1, (0, 0))
+		minLength = None
+		for x in add:
+			if minLength is None or len(x)<minLength: minLength=len(x)
+		out=set()
+		for x in add:
+			if len(x)==minLength:
+				out.add(x)
+		firstMapping[(pos0, pos1)] = (minLength, out)
+
+
+lastMapping=firstMapping
+for r in range(R - 1):
+	mapping={}
+	for pos0 in ((1, 0), (2, 0), (0, 1), (1, 1), (2, 1)):
+		for pos1 in ((1, 0), (2, 0), (0, 1), (1, 1), (2, 1)):
+			minLength = None
+			for x in firstMapping[(pos0, pos1)][1]:
+				pos = (2, 0)
+				aLength=0
+				for ch in x:
+					(length, _)=lastMapping[(pos, q(ch))]
+					pos=q(ch)
+					aLength+=length
+
+				if minLength is None or aLength<minLength:
+					minLength=aLength
+			mapping[(pos0, pos1)] = (minLength, None)
+	lastMapping=mapping
+
+
+answer=0
+for line in data:
+	pos=(2,3)
+	a=set()
+	for ch in line:
+		add=d(pos, p(ch), (0, 3))
+		pos = p(ch)
+		if len(a)==0:
+			a=add
+		else:
+			aIn = a
+			a = set()
+			for x in aIn:
+				for y in add: a.add(x+y)
+	minLength=None
+	for xx in a:
+		pos=(2, 0)
+		a=0
+		for ch in xx:
+			(x, add)=mapping[(pos, q(ch))]
+			a+=x
+			pos = q(ch)
+
+		if minLength is None or a < minLength:
+			minLength=a
+
+	print(line, minLength)
+	answer += minLength * int(line.replace('A',''))
+
+print(answer)
 #dir = (dir+4)%4
 #dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][dir] #clockwise, starting right
 #dir = 1 if dy==1 else 3 if dx==0 else 0 if dx==1 else 2 #clockwise, starting right
