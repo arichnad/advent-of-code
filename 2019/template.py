@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 # noinspection PyUnresolvedReferences
-import math, re, sys, itertools, functools, copy, json, threading, numpy
+import math, re, sys, itertools, functools, copy, json, threading, numpy # list(itertools.permutations(range(4), 4))
 # settings -> project -> python interpreter -> add new -> /usr/bin/pypy3 -> add new -> virtual environment .venv based on pypy3
 # OR sudo apt install python3-dev pypy3-dev python3-sortedcontainers python3-z3 python3-sympy python3-shapely python3-numpy
 sys.setrecursionlimit(100000)
@@ -23,7 +23,7 @@ data2='''
 data=data1
 
 #data = [int(line) for line in data]
-data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]
+#data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]
 #data = [[int(column) for column in line] for line in data]
 #data = [[int(column) for column in line.split(',')] for line in data]
 #data = [[column for column in line] for line in data]
