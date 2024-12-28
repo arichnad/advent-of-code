@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 # noinspection PyUnresolvedReferences
-import math, re, sys, itertools, functools, copy, json, threading, numpy # list(itertools.permutations(range(4), 4))
+import math, re, sys, itertools, functools, copy, json, threading, numpy, random, heapq, time # list(itertools.permutations(range(4), 4)); heapq.heappush(a, 3)
 # settings -> project -> python interpreter -> add new -> /usr/bin/pypy3 -> add new -> virtual environment .venv based on pypy3
 # OR sudo apt install python3-dev pypy3-dev python3-sortedcontainers python3-z3 python3-sympy python3-shapely python3-numpy
 sys.setrecursionlimit(100000)
@@ -27,7 +27,7 @@ data=data1
 # data = [[int(column) for column in line] for line in data]; W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line.split(',')] for line in data]; W,H=len(data[0]),len(data)
 # data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
-# data = [threading.Thread(target=lambda line: print(line), args=(line)) for line in data] #line.start() line.join()
+# python threads are not real:  thread=threading.Thread(target=lambda line: print(line), args=(line)); thread.start(); thread.join() #does not run in parallel on separate cores
 
 
 #for line in data:
@@ -54,6 +54,7 @@ data=data1
 #
 #for line in data: print(''.join(line))
 
+# bfs
 # for j in range(H):
 # 	for i in range(W):
 # 		if data[j][i]=='S': startX,startY=i,j
@@ -63,7 +64,7 @@ data=data1
 # while len(positions) > 0:
 # 	newPositions = []
 # 	for (cost, x, y) in sorted(positions): #remove sorted here if it's not needed
-#		if y<0 or y>=H or x<0 or x>=W: continue
+# 		if y<0 or y>=H or x<0 or x>=W: continue
 # 		if data[y][x] == '#': continue
 # 		if (x, y) in costs and cost >= costs[(x, y)]: continue #change >= here to > if you need to analyze ties
 # 		costs[(x, y)] = cost
@@ -73,6 +74,26 @@ data=data1
 # 		newPositions.append((cost + 1, x, y - 1))
 # 		newPositions.append((cost + 1, x, y + 1))
 # 	positions=newPositions
+# print(costs[(endX, endY)])
+
+
+# dijkstra’s
+# for j in range(H):
+# 	for i in range(W):
+# 		if data[j][i]=='S': startX,startY=i,j
+# 		if data[j][i]=='E': endX,endY=i,j
+# positions = [(0, startX, startY)]
+# costs={}
+# while len(positions) > 0:
+# 	(cost, x, y) = heapq.heappop(positions)
+# 	if y<0 or y>=H or x<0 or x>=W: continue
+# 	if data[y][x]=='#': continue
+# 	if (x, y) in costs and cost >= costs[(x, y)]: continue
+# 	costs[(x, y)] = cost
+#
+# 	for (cost, x, y) in ((cost + 1, x + 1, y), (cost + 1, x - 1, y), (cost + 1, x, y - 1), (cost + 1, x, y + 1)):
+# 		if (x, y) in costs and cost >= costs[(x, y)]: continue
+# 		heapq.heappush(positions, (cost, x, y))
 # print(costs[(endX, endY)])
 
 # # flood fill does NOT work when want a breadth first (minimum cost, that sort of thing)
