@@ -14,25 +14,63 @@ sys.setrecursionlimit(100000)
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
-
+A=[35300,-64910]
 '''.strip('\n').splitlines()
 data2='''
-
+A=[-21723,67997]
 '''.strip('\n').splitlines()
 
-data=data1
+data=data2
 
 # data = [int(line) for line in data]; H=len(data)
-# data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]; W,H=len(data[0]),len(data)
+data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]; W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line] for line in data]; W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line.split(',')] for line in data]; W,H=len(data[0]),len(data)
 # data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
 # python threads are not real:  thread=threading.Thread(target=lambda line: print(line), args=(line)); thread.start(); thread.join() #does not run in parallel on separate cores
 
+# d=[0,0]
+# d0=data[0][:]
+# for c in range(3):
+# 	d=[d[0] * d[0] - d[1] * d[1], d[0] * d[1] + d[1] * d[0]]
+# 	d[0]//=10
+# 	d[1]//=10
+# 	d[0]+=d0[0]
+# 	d[1]+=d0[1]
+# print(d)
 
-#for line in data:
 
+d=[0,0]
+start=data[0][:]
 
+answer=0
+for p in range(start[0], start[0]+1001, 1):
+	for q in range(start[1], start[1]+1001, 1):
+		fail=False
+		d=[0, 0]
+		d0=[p,q]
+		for c in range(100):
+			d=[d[0] * d[0] - d[1] * d[1], d[0] * d[1] + d[1] * d[0]]
+			if d[0]>=0:
+				d[0]//=100_000
+			else:
+				d[0]=-((-d[0])//100_000)
+			if d[1]>=0:
+				d[1]//=100_000
+			else:
+				d[1]=-((-d[1])//100_000)
+			d[0]+=d0[0]
+			d[1]+=d0[1]
+			if abs(d[0])>1000000 or abs(d[1])>1000000:
+				fail=True
+				break
+		if not fail: answer+=1
+		if fail: print(' ', end='')
+		else: print('.', end='')
+	print()
+		# print(p,q)
+
+print(answer) #980518
 
 #dir = (dir+4)%4
 #dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][dir] #clockwise, starting right

@@ -14,25 +14,44 @@ sys.setrecursionlimit(100000)
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
-
+Vyrdax,Drakzyph,Fyrryn,Elarzris
+R3,L2,R3,L3
 '''.strip('\n').splitlines()
 data2='''
-
+Tirdravor,Draithdar,Quenphor,Elvarryn,Ulmartyr,Ylarfroth,Zyrsor,Litheth,Brelfal,Fyrdra,Zalmal,Fenvoran,Qyrapyxis,Aeorjoris,Zynmarn,Harsarix,Drethaxis,Ulmarvash,Falnar,Ilmardar,Naldophis,Zyrixfarin,Vanorath,Varinjorath,Quarnselor,Voraxthel,Skarasis,Eryardith,Drakpyr,Ascalzeth
+L36,R7,L6,R25,L20,R5,L25,R23,L18,R32,L36,R23,L18,R36,L14,R5,L35,R22,L29,R12,L5,R44,L5,R14,L5,R18,L5,R7,L5,R32,L5,R48,L5,R32,L5,R45,L5,R10,L5,R19,L9,R7,L49,R35,L36,R22,L25,R34,L9,R42,L46,R30,L26,R8,L43,R29,L41,R45,L28
 '''.strip('\n').splitlines()
 
-data=data1
+data=data2
 
 # data = [int(line) for line in data]; H=len(data)
 # data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]; W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line] for line in data]; W,H=len(data[0]),len(data)
-# data = [[int(column) for column in line.split(',')] for line in data]; W,H=len(data[0]),len(data)
+data = [[column for column in line.split(',')] for line in data]; W,H=len(data[0]),len(data)
 # data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
 # python threads are not real:  thread=threading.Thread(target=lambda line: print(line), args=(line)); thread.start(); thread.join() #does not run in parallel on separate cores
 
+# n,d=data[0],data[1]
+# pos=0
+# print(pos, n[pos])
+# for line in d:
+# 	go=int(line[1:]) * (1 if line[0] == 'R' else -1)
+# 	pos+=go
+# 	pos+=len(n)
+# 	pos%=len(n)
+# 	print(go, pos, n[pos])
 
-#for line in data:
-
-
+n,d=data[0],data[1]
+pos=0
+print(pos, n[pos])
+for line in d:
+	pos=0
+	go=int(line[1:]) * (1 if line[0] == 'R' else -1)
+	pos+=go
+	pos+=len(n)
+	pos%=len(n)
+	s=n[pos];n[pos]=n[0];n[0]=s
+	print(go, pos, n[0])
 
 #dir = (dir+4)%4
 #dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][dir] #clockwise, starting right
