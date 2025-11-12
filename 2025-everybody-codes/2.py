@@ -14,10 +14,8 @@ sys.setrecursionlimit(100000)
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
-A=[35300,-64910]
 '''.strip('\n').splitlines()
 data2='''
-A=[-21723,67997]
 '''.strip('\n').splitlines()
 
 data=data2

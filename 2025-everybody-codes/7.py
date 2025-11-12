@@ -14,62 +14,8 @@ sys.setrecursionlimit(100000)
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
-Khara,Xaryt,Noxer,Kharax
-
-r > v,e,a,g,y
-a > e,v,x,r,g
-e > r,x,v,t
-h > a,e,v
-g > r,y
-y > p,t
-i > v,r
-K > h
-v > e
-B > r
-t > h
-N > e
-p > h
-H > e
-l > t
-z > e
-X > a
-n > v
-x > z
-T > i
 '''.strip('\n').splitlines()
 data2='''
-Ny,Nyl,Nyth,Nyss,Nyrix,Varin,Zyr,Jorath,Dreth,Tyr,Xil,Vyrl,Elt,Arak,Tor,Sor,Vorax,Felmar,Val,Quarn
-
-p > h
-N > y
-Q > u
-V > a,y,o
-F > e
-b > r
-c > r,y
-n > m,o,a,n,b,c,k
-r > n,i,y,o,a,m,b,c,k,v,l
-X > i
-k > y,o,a,n,m,b,c,k
-Z > y
-A > r
-y > v,x,n,t
-o > x,r,p,v
-u > a,v
-J > o
-a > r,c,v,t,k,x
-e > t,v
-h > i,o,a,n,m,b,c,k
-i > r,s,x,n,v
-E > l
-D > r
-l > o,a,n,m,b,c,k,v
-t > h,o,a,n,m,b,c,k
-x > o,a,n,m,b,c,k
-m > i,a
-S > o
-T > y,o
-s > s,o,a,n,m,b,c,k
 '''.strip('\n').splitlines()
 
 data=data2
