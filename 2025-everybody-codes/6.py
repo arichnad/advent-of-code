@@ -30,63 +30,63 @@ data=data2
 # mentor = 0
 # answer = 0
 # for ch in data[0]:
-#     if ch=='a':
-#         answer+=mentor
-#     elif ch=='A':
-#         mentor+=1
+# 	if ch=='a':
+# 		answer+=mentor
+# 	elif ch=='A':
+# 		mentor+=1
 # print(answer)
 
 # answer = 0
 # ma,mb,mc=0,0,0
 # for ch in data[0]:
-#     if ch=='a':
-#         answer+=ma
-#     elif ch=='A':
-#         ma+=1
-#     elif ch=='b':
-#         answer+=mb
-#     elif ch=='B':
-#         mb+=1
-#     elif ch=='c':
-#         answer+=mc
-#     elif ch=='C':
-#         mc+=1
+# 	if ch=='a':
+# 		answer+=ma
+# 	elif ch=='A':
+# 		ma+=1
+# 	elif ch=='b':
+# 		answer+=mb
+# 	elif ch=='B':
+# 		mb+=1
+# 	elif ch=='c':
+# 		answer+=mc
+# 	elif ch=='C':
+# 		mc+=1
 # print(answer)
 
 answer = 0
 ma,mb,mc=[],[],[]
 na,nb,nc=[],[],[]
 for i, ch in enumerate(data[0] * 1000):
-    while len(ma)>0 and i-ma[0]>1000:
-        ma.pop(0)
-    while len(mb)>0 and i-mb[0]>1000:
-        mb.pop(0)
-    while len(mc)>0 and i-mc[0]>1000:
-        mc.pop(0)
-    while len(na)>0 and i-na[0]>1000:
-        na.pop(0)
-    while len(nb)>0 and i-nb[0]>1000:
-        nb.pop(0)
-    while len(nc)>0 and i-nc[0]>1000:
-        nc.pop(0)
-    if ch=='a':
-        answer+=len(ma)
-        na.append(i)
-    elif ch=='A':
-        answer+=len(na)
-        ma.append(i)
-    elif ch=='b':
-        answer+=len(mb)
-        nb.append(i)
-    elif ch=='B':
-        answer+=len(nb)
-        mb.append(i)
-    elif ch=='c':
-        answer+=len(mc)
-        nc.append(i)
-    elif ch=='C':
-        answer+=len(nc)
-        mc.append(i)
+	while len(ma)>0 and i-ma[0]>1000:
+		ma.pop(0)
+	while len(mb)>0 and i-mb[0]>1000:
+		mb.pop(0)
+	while len(mc)>0 and i-mc[0]>1000:
+		mc.pop(0)
+	while len(na)>0 and i-na[0]>1000:
+		na.pop(0)
+	while len(nb)>0 and i-nb[0]>1000:
+		nb.pop(0)
+	while len(nc)>0 and i-nc[0]>1000:
+		nc.pop(0)
+	if ch=='a':
+		answer+=len(ma)
+		na.append(i)
+	elif ch=='A':
+		answer+=len(na)
+		ma.append(i)
+	elif ch=='b':
+		answer+=len(mb)
+		nb.append(i)
+	elif ch=='B':
+		answer+=len(nb)
+		mb.append(i)
+	elif ch=='c':
+		answer+=len(mc)
+		nc.append(i)
+	elif ch=='C':
+		answer+=len(nc)
+		mc.append(i)
 print(answer)
 
 #dir = (dir+4)%4

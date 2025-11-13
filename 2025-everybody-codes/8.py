@@ -32,66 +32,66 @@ data = [[int(column) for column in re.findall('-?\d+', line)] for line in data];
 # data=data[0]
 # answer=0
 # for i in range(len(data)-1):
-#     if abs(data[i]-data[i+1])==32//2:
-#         answer+=1
+# 	if abs(data[i]-data[i+1])==32//2:
+# 		answer+=1
 # print(answer)
 
 # prev=[]
 # data=data[0]
 # answer=0
 # for i in range(len(data)-1):
-#     (a,b) = (min(data[i], data[i+1]), max(data[i], data[i+1]))
-#     out=0
-#     for (c,d) in prev:
-#         if c <= a and d <= a:
-#             True
-#         elif c >= b and d >= b:
-#             True
-#         elif c < a and d > b:
-#             True
-#         elif c < a and d < b:
-#             # print(a, b, c, d, '1')
-#             out+=1
-#         elif c > a and d < b:
-#             True
-#         elif c > a and d > b:
-#             # print(a, b, c, d, '0')
-#             out+=1
-#     answer+=out
-#     prev.append((a, b))
+# 	(a,b) = (min(data[i], data[i+1]), max(data[i], data[i+1]))
+# 	out=0
+# 	for (c,d) in prev:
+# 		if c <= a and d <= a:
+# 			True
+# 		elif c >= b and d >= b:
+# 			True
+# 		elif c < a and d > b:
+# 			True
+# 		elif c < a and d < b:
+# 			# print(a, b, c, d, '1')
+# 			out+=1
+# 		elif c > a and d < b:
+# 			True
+# 		elif c > a and d > b:
+# 			# print(a, b, c, d, '0')
+# 			out+=1
+# 	answer+=out
+# 	prev.append((a, b))
 # print(answer)
 
 prev=[]
 data=data[0]
 answer=0
 for i in range(len(data)-1):
-    (a,b) = (min(data[i], data[i+1]), max(data[i], data[i+1]))
+	(a,b) = (min(data[i], data[i+1]), max(data[i], data[i+1]))
 
-    prev.append((a, b))
+	prev.append((a, b))
 for a in range(1, 256):
-    for b in range(a, 257):
-        out=0
-        for c,d in prev:
-            if a==c and b==d: continue
-            f=out
-            if c <= a and d <= a:
-                True
-            elif c >= b and d >= b:
-                True
-            elif c < a < b < d:
-                True
-            elif c < a < d < b:
-                # print(a, b, c, d, '1')
-                out+=1
-            elif a < c < d < b:
-                True
-            elif a < c < b < d:
-                # print(a, b, c, d, '0')
-                out+=1
+	for b in range(a, 257):
+		out=0
+		for c,d in prev:
+			if a==c and b==d: continue
+			f=out
+			if c <= a and d <= a:
+				True
+			elif c >= b and d >= b:
+				True
+			elif c < a < b < d:
+				True
+			elif c < a < d < b:
+				# print(a, b, c, d, '1')
+				out+=1
+			elif a < c < d < b:
+				True
+			elif a < c < b < d:
+				# print(a, b, c, d, '0')
+				out+=1
 
-            # if a==3 and b==7: print(a,b,c,d,out-f)
-        if (a,b) in prev: out+=1
-        answer=max(answer, out)
+			# if a==3 and b==7: print(a,b,c,d,out-f)
+		if (a,b) in prev: out+=1
+		answer=max(answer, out)
 print(answer)
 
 

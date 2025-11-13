@@ -30,80 +30,80 @@ data = [[column for column in line.split(':')] for line in data]; W,H=len(data[0
 
 # out=0
 # for i in range(len(data[0][1])):
-#     if data[0][1][i]==data[2][1][i]:
-#         out+=1
+# 	if data[0][1][i]==data[2][1][i]:
+# 		out+=1
 # print(out)
 # answer=out
 # out=0
 # for i in range(len(data[0][1])):
-#     if data[1][1][i]==data[2][1][i]:
-#         out+=1
+# 	if data[1][1][i]==data[2][1][i]:
+# 		out+=1
 # print(out)
 # answer*=out
 # print(answer)
 # answer=0
 # for a in range(len(data)):
-#     for b in range(a+1,len(data)):
-#         for c in range(len(data)):
-#             if b==c or a==c: continue
+# 	for b in range(a+1,len(data)):
+# 		for c in range(len(data)):
+# 			if b==c or a==c: continue
 #
-#             out1,out2=0,0
-#             for i in range(len(data[0][1])):
-#                 if data[a][1][i] == data[c][1][i]:
-#                     out1+=1
-#                 if data[b][1][i] == data[c][1][i]:
-#                     out2+=1
-#                 if data[a][1][i] != data[c][1][i] and data[b][1][i] != data[c][1][i]:
-#                     break
-#             else:
-#                 print(a+1,b+1,c+1,out1 * out2)
-#                 answer+=out1*out2
+# 			out1,out2=0,0
+# 			for i in range(len(data[0][1])):
+# 				if data[a][1][i] == data[c][1][i]:
+# 					out1+=1
+# 				if data[b][1][i] == data[c][1][i]:
+# 					out2+=1
+# 				if data[a][1][i] != data[c][1][i] and data[b][1][i] != data[c][1][i]:
+# 					break
+# 			else:
+# 				print(a+1,b+1,c+1,out1 * out2)
+# 				answer+=out1*out2
 # print(answer)
 answer=0
 d={}
 for a in range(len(data)):
-    for b in range(a+1,len(data)):
-        for c in range(len(data)):
-            if b==c or a==c: continue
+	for b in range(a+1,len(data)):
+		for c in range(len(data)):
+			if b==c or a==c: continue
 
-            for i in range(len(data[0][1])):
-                if data[a][1][i] != data[c][1][i] and data[b][1][i] != data[c][1][i]:
-                    break
-            else:
-                print(a+1,b+1,c+1)
-                if a not in d:
-                    d[a]=[]
-                d[a].append(b)
-                d[a].append(c)
+			for i in range(len(data[0][1])):
+				if data[a][1][i] != data[c][1][i] and data[b][1][i] != data[c][1][i]:
+					break
+			else:
+				print(a+1,b+1,c+1)
+				if a not in d:
+					d[a]=[]
+				d[a].append(b)
+				d[a].append(c)
 
-                if b not in d:
-                    d[b]=[]
-                d[b].append(a)
-                d[b].append(c)
+				if b not in d:
+					d[b]=[]
+				d[b].append(a)
+				d[b].append(c)
 
-                if c not in d:
-                    d[c]=[]
-                d[c].append(a)
-                d[c].append(b)
+				if c not in d:
+					d[c]=[]
+				d[c].append(a)
+				d[c].append(b)
 
 def ff(x, visited):
-    global d
-    if x in visited: return
-    visited.add(x)
-    if x not in d: return
+	global d
+	if x in visited: return
+	visited.add(x)
+	if x not in d: return
 
-    for fam in d[x]:
-        ff(fam, visited)
+	for fam in d[x]:
+		ff(fam, visited)
 
 answer_count=0
 for i in range(len(data)):
-    visited=set()
-    ff(i, visited)
-    out=sum(i+1 for i in visited)
-    print(i, out)
-    if len(visited) > answer_count:
-        answer_count=len(visited)
-        answer=out
+	visited=set()
+	ff(i, visited)
+	out=sum(i+1 for i in visited)
+	print(i, out)
+	if len(visited) > answer_count:
+		answer_count=len(visited)
+		answer=out
 
 
 print(answer) # 83578

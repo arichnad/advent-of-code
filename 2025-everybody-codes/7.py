@@ -33,36 +33,36 @@ data=data2
 # data.pop(0)
 #
 # for x in name:
-#     for n in range(len(x)-1):
-#         good = False
-#         for d in data:
-#             a,b=d.split(' > ')
-#             b=b.split(',')
-#             # print(x[n], a, x[n+1], b)
-#             if x[n]==a and x[n+1] in b:
-#                 good = True
-#                 break
-#         if not good: break
-#     else:
-#         print(x)
+# 	for n in range(len(x)-1):
+# 		good = False
+# 		for d in data:
+# 			a,b=d.split(' > ')
+# 			b=b.split(',')
+# 			# print(x[n], a, x[n+1], b)
+# 			if x[n]==a and x[n+1] in b:
+# 				good = True
+# 				break
+# 		if not good: break
+# 	else:
+# 		print(x)
 # name=data.pop(0).split(',')
 # data.pop(0)
 #
 # answer=0
 # for xi, x in enumerate(name):
-#     for n in range(len(x)-1):
-#         good = False
-#         for d in data:
-#             a,b=d.split(' > ')
-#             b=b.split(',')
-#             # print(x[n], a, x[n+1], b)
-#             if x[n]==a and x[n+1] in b:
-#                 good = True
-#                 break
-#         if not good: break
-#     else:
-#         answer+=xi+1
-#         print(xi+1, x)
+# 	for n in range(len(x)-1):
+# 		good = False
+# 		for d in data:
+# 			a,b=d.split(' > ')
+# 			b=b.split(',')
+# 			# print(x[n], a, x[n+1], b)
+# 			if x[n]==a and x[n+1] in b:
+# 				good = True
+# 				break
+# 		if not good: break
+# 	else:
+# 		answer+=xi+1
+# 		print(xi+1, x)
 # print(answer)
 
 names=data.pop(0).split(',')
@@ -70,39 +70,39 @@ data.pop(0)
 used=set()
 
 def _(full, letter, length):
-    global data, used
-    if full in used:
-        return 0
-    used.add(full)
-    if length == 11: return 1
-    answer=1 if length>=7 else 0
-    for d in data:
-        a,b=d.split(' > ')
-        if a!=letter: continue
-        b=b.split(',')
-        # print(x[n], a, x[n+1], b)
-        for b_letter in b:
-            answer+=_(full+b_letter, b_letter, length+1)
-    # print(letter, length, answer)
+	global data, used
+	if full in used:
+		return 0
+	used.add(full)
+	if length == 11: return 1
+	answer=1 if length>=7 else 0
+	for d in data:
+		a,b=d.split(' > ')
+		if a!=letter: continue
+		b=b.split(',')
+		# print(x[n], a, x[n+1], b)
+		for b_letter in b:
+			answer+=_(full+b_letter, b_letter, length+1)
+	# print(letter, length, answer)
 
-    return answer
+	return answer
 
 answer=0
 for xi, x in enumerate(names):
-    for n in range(len(x)-1):
-        good = False
-        for d in data:
-            a,b=d.split(' > ')
-            b=b.split(',')
-            # print(x[n], a, x[n+1], b)
-            if x[n]==a and x[n+1] in b:
-                good = True
-                break
-        if not good: break
-    else:
-        out=_(x, x[len(x)-1], len(x))
-        print(x, out)
-        answer+=out
+	for n in range(len(x)-1):
+		good = False
+		for d in data:
+			a,b=d.split(' > ')
+			b=b.split(',')
+			# print(x[n], a, x[n+1], b)
+			if x[n]==a and x[n+1] in b:
+				good = True
+				break
+		if not good: break
+	else:
+		out=_(x, x[len(x)-1], len(x))
+		print(x, out)
+		answer+=out
 print(answer)
 
 
