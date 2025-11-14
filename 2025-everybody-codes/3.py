@@ -113,7 +113,7 @@ print(ans)
 # print(costs[(endX, endY)])
 
 
-# dijkstra’s
+# dijkstra's
 # for j in range(H):
 # 	for i in range(W):
 # 		if data[j][i]=='S': startX,startY=i,j
