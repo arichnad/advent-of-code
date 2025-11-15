@@ -14,19 +14,17 @@ sys.setrecursionlimit(100000)
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
 
 data1='''
-
 '''.strip('\n').splitlines()
 data2='''
-
 '''.strip('\n').splitlines()
 
-data=data1
+data=data2
 
 # data = [int(line) for line in data]; H=len(data)
 # data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]; W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line] for line in data]; W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line.split(',')] for line in data]; W,H=len(data[0]),len(data)
-# data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
+data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
 # python threads are not real:  thread=threading.Thread(target=lambda line: print(line), args=(line)); thread.start(); thread.join() #does not run in parallel on separate cores
 
 
@@ -55,25 +53,176 @@ data=data1
 #for line in data: print(''.join(line))
 
 # bfs
+# sheep=[]
 # for j in range(H):
 # 	for i in range(W):
-# 		if data[j][i]=='S': startX,startY=i,j
-# 		if data[j][i]=='E': endX,endY=i,j
+# 		if data[j][i]=='D': startX,startY=i,j
+# 		if data[j][i]=='S':
+# 			data[j][i]='.'
+# 			sheep.append((i,j))
 # positions = [(0, startX, startY)]
 # costs={}
+# answer=0
+# first=True
 # while len(positions) > 0:
 # 	newPositions = []
+# 	visited=set()
 # 	for (cost, x, y) in sorted(positions): #remove sorted here if it's not needed
+# 		if cost == 3+1:
+# 			continue
 # 		if y<0 or y>=H or x<0 or x>=W: continue
-# 		if data[y][x] == '#': continue
+# 		if (x,y) in visited: continue
+# 		visited.add((x,y))
+# 		if data[y][x]!='#' and (x, y) in sheep: answer+=1
 # 		if (x, y) in costs and cost >= costs[(x, y)]: continue #change >= here to > if you need to analyze ties
 # 		costs[(x, y)] = cost
 #
-# 		for (cost, x, y) in ((cost + 1, x + 1, y), (cost + 1, x - 1, y), (cost + 1, x, y - 1), (cost + 1, x, y + 1)):
-# 			newPositions.append((cost, x, y))
-# 	positions=newPositions
-# print(costs[(endX, endY)])
+# 		newPositions.append((cost + 1, x + 2, y+1))
+# 		newPositions.append((cost + 1, x - 2, y+1))
+# 		newPositions.append((cost + 1, x + 2, y-1))
+# 		newPositions.append((cost + 1, x - 2, y-1))
+# 		newPositions.append((cost + 1, x - 1, y+2))
+# 		newPositions.append((cost + 1, x + 1, y+2))
+# 		newPositions.append((cost + 1, x - 1, y-2))
+# 		newPositions.append((cost + 1, x + 1, y-2))
+#
+#
+#
+# 	sheep = [(s[0],s[1]+1) for s in sheep]
+# 	for (cost, x, y) in positions:
+# 		if y<0 or y>=H or x<0 or x>=W: continue
+# 		if data[y][x]!='#' and (x, y) in sheep:
+# 			print('  ', x, y)
+# 			answer+=1
+#
+# 	print(answer)
+# print(answer)
 
+# sheep=[]
+# for j in range(H):
+# 	for i in range(W):
+# 		if data[j][i]=='D': startX,startY=i,j
+# 		if data[j][i]=='S':
+# 			data[j][i]='.'
+# 			sheep.append((i,j))
+# positions = [(0, startX, startY)]
+# costs={}
+# answer=0
+# first=True
+# for v in range(20):
+# 	newPositions = []
+# 	visited=set()
+# 	for (cost, x, y) in sorted(positions): #remove sorted here if it's not needed
+# 		if y<0 or y>=H or x<0 or x>=W: continue
+# 		if (x, y) in visited: continue
+# 		visited.add((x,y))
+#
+# 		newPositions.append((cost + 1, x + 2, y+1))
+# 		newPositions.append((cost + 1, x - 2, y+1))
+# 		newPositions.append((cost + 1, x + 2, y-1))
+# 		newPositions.append((cost + 1, x - 2, y-1))
+# 		newPositions.append((cost + 1, x - 1, y+2))
+# 		newPositions.append((cost + 1, x + 1, y+2))
+# 		newPositions.append((cost + 1, x - 1, y-2))
+# 		newPositions.append((cost + 1, x + 1, y-2))
+#
+# 	for (cost, x, y) in newPositions:
+# 		if y<0 or y>=H or x<0 or x>=W: continue
+# 		if data[y][x]!='#' and (x, y) in sheep:
+# 			print('  ', x, y)
+# 			answer+=1
+# 			sheep.remove((x, y))
+#
+# 	sheep = [(s[0],s[1]+1) for s in sheep]
+# 	print(answer)
+#
+# 	for (cost, x, y) in newPositions:
+# 		if y<0 or y>=H or x<0 or x>=W: continue
+# 		if data[y][x]!='#' and (x, y) in sheep:
+# 			print('  ', x, y)
+# 			answer+=1
+# 			sheep.remove((x, y))
+#
+# 	print(answer)
+#
+# 	positions=newPositions
+# 	print(answer)
+# print(answer)
+
+sh=[]
+for j in range(H):
+	for i in range(W):
+		if data[j][i]=='D': startX,startY=i,j
+		if data[j][i]=='S':
+			data[j][i]='.'
+			sh.append((i,j))
+positions = {(startX, startY, tuple(sh)): 1}
+answer=0
+first=True
+while len(positions)>0:
+# for n in range(8):
+	newPositions = {}
+	for (x, y, sheep), ways in positions.items():
+		moved=False
+		tmp=list(sheep)
+		for (sx,sy) in sheep:
+			if sy+1==H:
+				moved=True
+				continue
+			if data[sy+1][sx]=='#' or (x,y)!=(sx,sy+1):
+				moved=True
+
+				tmp.remove((sx,sy))
+				tmp.append((sx,sy+1))
+				key=(x,y,tuple(sorted(tmp)))
+				if key in newPositions:
+					newPositions[key]+=ways
+				else:
+					newPositions[key]=ways
+				# moves + " S>{}{}".format(chr(ord('A')+sx), sy+1+1))
+				tmp.remove((sx,sy+1))
+				tmp.append((sx,sy))
+		if not moved:
+			if len(sheep)!=1: print('no')
+			key=(x,y,sheep)
+			if key in newPositions:
+				newPositions[key]+=ways
+			else:
+				newPositions[key]=ways
+	positions=newPositions
+
+	newPositions={}
+	for (x, y, sheep), ways in positions.items():
+		if y<0 or y>=H or x<0 or x>=W: continue
+
+		for (x, y) in (
+				(x + 2, y+1),
+				(x - 2, y+1),
+				(x + 2, y-1),
+				(x - 2, y-1),
+				(x - 1, y+2),
+				(x + 1, y+2),
+				(x - 1, y-2),
+				(x + 1, y-2),
+		):
+			if y<0 or y>=H or x<0 or x>=W: continue
+			newSheep = []
+			for (sx,sy) in sheep:
+				if data[y][x] != '#' and (x,y)==(sx,sy):
+					continue
+				newSheep.append((sx, sy))
+			if len(newSheep)==0:
+				print('         ', answer, ways)
+				answer += ways
+				continue
+			key=(x,y,tuple(newSheep))
+			if key in newPositions:
+				newPositions[key]+=ways
+			else:
+				newPositions[key]=ways
+			# moves + " D>{}{}".format(chr(ord('A')+x), y+1))
+	positions=newPositions
+print(answer)
 
 # dijkstra's
 # for j in range(H):
@@ -105,8 +254,4 @@ data=data1
 # 	ff(x, y + 1)
 # 	ff(x, y - 1)
 #
-# for j in range(H):
-# 	for i in range(W):
-# 		if data[j][i]=='S': startX,startY=i,j
-# 		if data[j][i]=='E': endX,endY=i,j
 # ff(startX, startY)
