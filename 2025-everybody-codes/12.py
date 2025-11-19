@@ -22,91 +22,14 @@ data=data2
 
 # data = [int(line) for line in data]; H=len(data)
 # data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]; W,H=len(data[0]),len(data)
-# data = [[int(column) for column in line] for line in data]; W,H=len(data[0]),len(data)
-data = [[column for column in line.split(':')] for line in data]; W,H=len(data[0]),len(data)
+data = [[int(column) for column in line] for line in data]; W,H=len(data[0]),len(data)
+# data = [[int(column) for column in line.split(',')] for line in data]; W,H=len(data[0]),len(data)
 # data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
 # python threads are not real:  thread=threading.Thread(target=lambda line: print(line), args=(line)); thread.start(); thread.join() #does not run in parallel on separate cores
 
 
-# out=0
-# for i in range(len(data[0][1])):
-# 	if data[0][1][i]==data[2][1][i]:
-# 		out+=1
-# print(out)
-# answer=out
-# out=0
-# for i in range(len(data[0][1])):
-# 	if data[1][1][i]==data[2][1][i]:
-# 		out+=1
-# print(out)
-# answer*=out
-# print(answer)
-# answer=0
-# for a in range(len(data)):
-# 	for b in range(a+1,len(data)):
-# 		for c in range(len(data)):
-# 			if b==c or a==c: continue
-#
-# 			out1,out2=0,0
-# 			for i in range(len(data[0][1])):
-# 				if data[a][1][i] == data[c][1][i]:
-# 					out1+=1
-# 				if data[b][1][i] == data[c][1][i]:
-# 					out2+=1
-# 				if data[a][1][i] != data[c][1][i] and data[b][1][i] != data[c][1][i]:
-# 					break
-# 			else:
-# 				print(a+1,b+1,c+1,out1 * out2)
-# 				answer+=out1*out2
-# print(answer)
-answer=0
-d={}
-for a in range(len(data)):
-	for b in range(a+1,len(data)):
-		for c in range(len(data)):
-			if b==c or a==c: continue
+#for line in data:
 
-			for i in range(len(data[0][1])):
-				if data[a][1][i] != data[c][1][i] and data[b][1][i] != data[c][1][i]:
-					break
-			else:
-				print(a+1,b+1,c+1)
-				if a not in d:
-					d[a]=[]
-				d[a].append(b)
-				d[a].append(c)
-
-				if b not in d:
-					d[b]=[]
-				d[b].append(a)
-				d[b].append(c)
-
-				if c not in d:
-					d[c]=[]
-				d[c].append(a)
-				d[c].append(b)
-
-def ff(x, visited):
-	global d
-	if x in visited: return
-	visited.add(x)
-	if x not in d: return
-
-	for fam in d[x]:
-		ff(fam, visited)
-
-answer_count=0
-for i in range(len(data)):
-	visited=set()
-	ff(i, visited)
-	out=sum(i+1 for i in visited)
-	print(i, out)
-	if len(visited) > answer_count:
-		answer_count=len(visited)
-		answer=out
-
-
-print(answer)
 
 
 #dir = (dir+4)%4
@@ -144,10 +67,8 @@ print(answer)
 # 		if (x, y) in costs and cost >= costs[(x, y)]: continue #change >= here to > if you need to analyze ties
 # 		costs[(x, y)] = cost
 #
-# 		newPositions.append((cost + 1, x + 1, y))
-# 		newPositions.append((cost + 1, x - 1, y))
-# 		newPositions.append((cost + 1, x, y - 1))
-# 		newPositions.append((cost + 1, x, y + 1))
+# 		for (cost, x, y) in ((cost + 1, x + 1, y), (cost + 1, x - 1, y), (cost + 1, x, y - 1), (cost + 1, x, y + 1)):
+# 			newPositions.append((cost, x, y))
 # 	positions=newPositions
 # print(costs[(endX, endY)])
 
@@ -171,15 +92,71 @@ print(answer)
 # 		heapq.heappush(positions, (cost, x, y))
 # print(costs[(endX, endY)])
 
-# # flood fill does NOT work when want a breadth first (minimum cost, that sort of thing)
+# # # flood fill does NOT work when want a breadth first (minimum cost, that sort of thing)
 # visited=set()
 # def ff(x, y):
 # 	if y<0 or x<0 or y>=H or x>=W: return
 # 	if data[y][x] == '#' or (x, y) in visited: return
+# 	old=data[y][x]
 # 	visited.add((x, y))
-# 	ff(x + 1, y)
-# 	ff(x - 1, y)
-# 	ff(x, y + 1)
-# 	ff(x, y - 1)
+# 	for (x, y) in ((x+1,y), (x-1,y), (x,y+1), (x,y-1)):
+# 		if y<0 or x<0 or y>=H or x>=W: continue
+# 		if data[y][x]>old: continue
+# 		ff(x, y)
 #
-# ff(startX, startY)
+# # for j in range(H):
+# # 	for i in range(W):
+# # 		if data[j][i]=='S': startX,startY=i,j
+# # 		if data[j][i]=='E': endX,endY=i,j
+# ff(0, 0)
+# ff(W-1, H-1)
+# print(len(visited))
+
+
+# # flood fill does NOT work when want a breadth first (minimum cost, that sort of thing)
+def ff(x, y):
+	if y<0 or x<0 or y>=H or x>=W: return
+	if data[y][x] == '#' or (x, y) in visited: return
+	old=data[y][x]
+	visited.add((x, y))
+	for (x, y) in ((x+1,y), (x-1,y), (x,y+1), (x,y-1)):
+		if y<0 or x<0 or y>=H or x>=W: continue
+		if data[y][x]>old: continue
+		ff(x, y)
+
+# for j in range(H):
+# 	for i in range(W):
+# 		if data[j][i]=='S': startX,startY=i,j
+# 		if data[j][i]=='E': endX,endY=i,j
+start=set()
+maxes=[]
+for n in range(3):
+	maxValue=0
+	for j in range(H):
+		print()
+		for i in range(W):
+			visited=start.copy()
+			ff(i, j)
+			if len(visited) > maxValue:
+				maxValue = len(visited)
+				theseMaxes=(j,i)
+				maxVisited=visited
+	start=maxVisited
+	maxes.append(theseMaxes)
+
+positions=maxes
+visited=set()
+while len(positions) > 0:
+	newPositions = []
+	for (y, x) in positions: #remove sorted here if it's not needed
+		if y<0 or y>=H or x<0 or x>=W or (y,x) in visited: continue
+		visited.add((y, x))
+		old=data[y][x]
+
+		for (x, y) in ((x + 1, y), (x - 1, y), (x, y - 1), (x, y + 1)):
+			if y<0 or y>=H or x<0 or x>=W or (y,x) in visited: continue
+			if data[y][x]>old: continue
+			newPositions.append((y, x))
+	positions=newPositions
+print(maxes)
+print(len(visited), visited)
