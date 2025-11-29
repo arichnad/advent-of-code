@@ -57,22 +57,26 @@ data=data1
 # bfs
 # for j in range(H):
 # 	for i in range(W):
-# 		if data[j][i]=='S': startX,startY=i,j
-# 		if data[j][i]=='E': endX,endY=i,j
-# positions = [(0, startX, startY)]
+# 		if data[j][i]=='S': startY,startX=j,i
+# 		if data[j][i]=='E': endY,endX=j,i
+# positions = [(0, startY, startX)]
 # costs={}
 # while len(positions) > 0:
+# 	# print(len(positions))
 # 	newPositions = []
-# 	for (cost, x, y) in sorted(positions): #remove sorted here if it's not needed
+# 	for (cost, y, x) in sorted(positions): #remove sorted here if it's not needed
 # 		if y<0 or y>=H or x<0 or x>=W: continue
 # 		if data[y][x] == '#': continue
-# 		if (x, y) in costs and cost >= costs[(x, y)]: continue #change >= here to > if you need to analyze ties
-# 		costs[(x, y)] = cost
+# 		if y==endY and x==endX:
+# 			print(cost)
+# 			newPositions=[]
+# 			break
+# 		if (y, x) in costs and cost >= costs[(y, x)]: continue #change >= here to > if you need to analyze ties
+# 		costs[(y, x)] = cost
 #
-# 		for (cost, x, y) in ((cost + 1, x + 1, y), (cost + 1, x - 1, y), (cost + 1, x, y - 1), (cost + 1, x, y + 1)):
-# 			newPositions.append((cost, x, y))
+# 		for (y, x) in ((y, x + 1), (y, x - 1), (y + 1, x), (y - 1, x)):
+# 			newPositions.append((cost + 1, y, x))
 # 	positions=newPositions
-# print(costs[(endX, endY)])
 
 
 # dijkstra's
@@ -89,9 +93,9 @@ data=data1
 # 	if (x, y) in costs and cost >= costs[(x, y)]: continue
 # 	costs[(x, y)] = cost
 #
-# 	for (cost, x, y) in ((cost + 1, x + 1, y), (cost + 1, x - 1, y), (cost + 1, x, y - 1), (cost + 1, x, y + 1)):
-# 		if (x, y) in costs and cost >= costs[(x, y)]: continue
-# 		heapq.heappush(positions, (cost, x, y))
+# 	for (x, y) in ((x + 1, y), (x - 1, y), (x, y - 1), (x, y + 1)):
+# 		if (x, y) in costs and cost+1 >= costs[(x, y)]: continue
+# 		heapq.heappush(positions, (cost+1, x, y))
 # print(costs[(endX, endY)])
 
 # # flood fill does NOT work when want a breadth first (minimum cost, that sort of thing)
