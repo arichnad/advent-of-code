@@ -12,6 +12,7 @@ sys.setrecursionlimit(100000)
 # import lmfit #sudo apt install python3-dev pypy3-dev libopenblas-dev gfortran && python3 -mpip install lmfit
 # from sympy import * #python3 -mpip install sympy # x,y=symbols('x y'); print(solve([x <= 10, x >= 10]))
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area) #sudo apt install python3-dev pypy3-dev libgeos-dev && python3 -mpip install shapely
+# from testtemplate import *
 
 data1='''
 
@@ -27,34 +28,34 @@ data=data1
 # data = [[int(column) for column in line] for line in data]; W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line.split(',')] for line in data]; W,H=len(data[0]),len(data)
 # data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
-# python threads are not real:  thread=threading.Thread(target=lambda line: print(line), args=(line)); thread.start(); thread.join() #does not run in parallel on separate cores
+# python threads are not real:  thread=threading.Thread(target=lambda line: print(line), args=(line)); thread.start(); thread.join() # does not run in parallel on separate cores
 
 
-#for line in data:
+# for line in data:
 
 
 
-#dir = (dir+4)%4
-#dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][dir] #clockwise, starting right
-#dir = 1 if dy==1 else 3 if dx==0 else 0 if dx==1 else 2 #clockwise, starting right
-#dir = 'rdlu'.find(d.lower()) #clockwise, starting right
-#dir = ['right', 'down', 'left', 'up'].index(d.lower()) #clockwise, starting right
-#dir = '>v<^'.find(d.lower()) #clockwise, starting right
+# dir = (dir+4)%4
+# dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][dir] # clockwise, starting right
+# dir = 1 if dy==1 else 3 if dx==0 else 0 if dx==1 else 2 # clockwise, starting right
+# dir = 'rdlu'.find(d.lower()) # clockwise, starting right
+# dir = ['right', 'down', 'left', 'up'].index(d.lower()) # clockwise, starting right
+# dir = '>v<^'.find(d.lower()) # clockwise, starting right
 
-#data = [[column for column in line] for line in data]
-#for j in range(H):
-#	for i in range(W):
-#		for dy in range(-1, 2):
-#			for dx in range(-1, 2):
-#				#if dx==0 and dy==0: continue
-#				if dx==0 and dy==0 or dx!=0 and dy!=0: continue
-#
-#				newY,newX=j+dy,i+dx
-#				if newY<0 or newX<0 or newY>=H or newX>=W: continue
-#
-#for line in data: print(''.join(line))
+# data = [[column for column in line] for line in data]
+# for j in range(H):
+# 	for i in range(W):
+# 		for dy in range(-1, 2):
+# 			for dx in range(-1, 2):
+# 				# if dx==0 and dy==0: continue
+# 				if dx==0 and dy==0 or dx!=0 and dy!=0: continue
+# 
+# 				newY,newX=j+dy,i+dx
+# 				if newY<0 or newX<0 or newY>=H or newX>=W: continue
+# 
+# for line in data: print(''.join(line))
 
-# bfs
+# bfs simple queue
 # for j in range(H):
 # 	for i in range(W):
 # 		if data[j][i]=='S': startY,startX=j,i
@@ -64,53 +65,64 @@ data=data1
 # while len(positions) > 0:
 # 	# print(len(positions))
 # 	newPositions = []
-# 	for (cost, y, x) in sorted(positions): #remove sorted here if it's not needed
+# 	for (cost, y, x) in sorted(positions): # remove sorted here if it's not needed
 # 		if y<0 or y>=H or x<0 or x>=W: continue
 # 		if data[y][x] == '#': continue
 # 		if y==endY and x==endX:
 # 			print(cost)
 # 			newPositions=[]
 # 			break
-# 		if (y, x) in costs and cost >= costs[(y, x)]: continue #change >= here to > if you need to analyze ties
+# 		if (y, x) in costs and cost >= costs[(y, x)]: continue # change >= here to > if you need to analyze ties
 # 		costs[(y, x)] = cost
-#
-# 		for (y, x) in ((y, x + 1), (y, x - 1), (y + 1, x), (y - 1, x)):
-# 			newPositions.append((cost + 1, y, x))
+# 
+# 		for dy in range(-1, 2):
+# 			for dx in range(-1, 2):
+# 				# if dx==0 and dy==0: continue
+# 				if dx==0 and dy==0 or dx!=0 and dy!=0: continue
+# 				newPositions.append((cost + 1, y+dy, x+dx))
 # 	positions=newPositions
 
 
-# dijkstra's
+# bfs (priority queue)
 # for j in range(H):
 # 	for i in range(W):
-# 		if data[j][i]=='S': startX,startY=i,j
-# 		if data[j][i]=='E': endX,endY=i,j
-# positions = [(0, startX, startY)]
+# 		if data[j][i]=='S': startY,startX=j,i
+# 		if data[j][i]=='E': endY,endX=j,i
+# positions = [(0, startY, startX)]
 # costs={}
 # while len(positions) > 0:
-# 	(cost, x, y) = heapq.heappop(positions)
+# 	(cost, y, x) = heapq.heappop(positions)
 # 	if y<0 or y>=H or x<0 or x>=W: continue
 # 	if data[y][x]=='#': continue
-# 	if (x, y) in costs and cost >= costs[(x, y)]: continue
-# 	costs[(x, y)] = cost
-#
-# 	for (x, y) in ((x + 1, y), (x - 1, y), (x, y - 1), (x, y + 1)):
-# 		if (x, y) in costs and cost+1 >= costs[(x, y)]: continue
-# 		heapq.heappush(positions, (cost+1, x, y))
-# print(costs[(endX, endY)])
+# 	if (y, x) in costs and cost >= costs[(y, x)]: continue
+# 	costs[(y, x)] = cost
+# 	
+# 	for dy in range(-1, 2):
+# 		for dx in range(-1, 2):
+# 			# if dx==0 and dy==0: continue
+# 			if dx==0 and dy==0 or dx!=0 and dy!=0: continue
+# 			if (y+dy, x+dx) in costs and cost+1 >= costs[(y+dy, x+dx)]: continue
+# 			heapq.heappush(positions, (cost+1, y+dy, x+dx))
+# print(costs[(endY, endX)])
 
-# # flood fill does NOT work when want a breadth first (minimum cost, that sort of thing)
-# visited=set()
-# def ff(x, y):
-# 	if y<0 or x<0 or y>=H or x>=W: return
-# 	if data[y][x] == '#' or (x, y) in visited: return
-# 	visited.add((x, y))
-# 	ff(x + 1, y)
-# 	ff(x - 1, y)
-# 	ff(x, y + 1)
-# 	ff(x, y - 1)
-#
+# flood fill does NOT work when want a breadth first (minimum cost, that sort of thing)
 # for j in range(H):
 # 	for i in range(W):
-# 		if data[j][i]=='S': startX,startY=i,j
-# 		if data[j][i]=='E': endX,endY=i,j
-# ff(startX, startY)
+# 		if data[j][i]=='S': startY,startX=j,i
+# 		if data[j][i]=='E': endY,endX=j,i
+# visited=set()
+# def ff(y, x):
+# 	if y<0 or x<0 or y>=H or x>=W: return 0
+# 	if data[y][x] == '#' or (y, x) in visited: return 0
+# 	visited.add((y, x))
+# 
+# 	answer=1
+# 	for dy in range(-1, 2):
+# 		for dx in range(-1, 2):
+# 			# if dx==0 and dy==0: continue
+# 			if dx==0 and dy==0 or dx!=0 and dy!=0: continue
+# 			answer+=ff(y+dy, x+dx)
+# 	return answer
+# 
+# print(ff(startY, startX))
+
