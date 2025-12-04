@@ -48,7 +48,7 @@ data=data1
 # 		for dy in range(-1, 2):
 # 			for dx in range(-1, 2):
 # 				# if dx==0 and dy==0: continue
-# 				if dx==0 and dy==0 or dx!=0 and dy!=0: continue
+# 				if abs(dx)+abs(dy)!=1: continue
 # 
 # 				newY,newX=j+dy,i+dx
 # 				if newY<0 or newX<0 or newY>=H or newX>=W: continue
@@ -78,7 +78,7 @@ data=data1
 # 		for dy in range(-1, 2):
 # 			for dx in range(-1, 2):
 # 				# if dx==0 and dy==0: continue
-# 				if dx==0 and dy==0 or dx!=0 and dy!=0: continue
+# 				if abs(dx)+abs(dy)!=1: continue
 # 				newPositions.append((cost + 1, y+dy, x+dx))
 # 	positions=newPositions
 
@@ -100,7 +100,7 @@ data=data1
 # 	for dy in range(-1, 2):
 # 		for dx in range(-1, 2):
 # 			# if dx==0 and dy==0: continue
-# 			if dx==0 and dy==0 or dx!=0 and dy!=0: continue
+# 			if abs(dx)+abs(dy)!=1: continue
 # 			if (y+dy, x+dx) in costs and cost+1 >= costs[(y+dy, x+dx)]: continue
 # 			heapq.heappush(positions, (cost+1, y+dy, x+dx))
 # print(costs[(endY, endX)])
@@ -120,7 +120,7 @@ data=data1
 # 	for dy in range(-1, 2):
 # 		for dx in range(-1, 2):
 # 			# if dx==0 and dy==0: continue
-# 			if dx==0 and dy==0 or dx!=0 and dy!=0: continue
+# 			if abs(dx)+abs(dy)!=1: continue
 # 			answer+=ff(y+dy, x+dx)
 # 	return answer
 # 
