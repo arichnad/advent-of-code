@@ -12,32 +12,148 @@ sys.setrecursionlimit(100000)
 # from sortedcontainers import SortedList #SortedList('bat') + 'cat'
 # from astar import AStar #see astarExample.py
 # from collections import defaultdict, deque, Counter
-# from z3.z3 import * # s = Solver(); x = Real('x'); y = Real('y'); s.add([x <= 10, x >= 10]); print(s); print(s.check()); if s.check()==z3.sat: print(int(str(s.model()[x]))) #Int is sometimes slow, but also sometimes Real doesn't give you what you want
+from z3.z3 import * # s = Solver(); x = Real('x'); y = Real('y'); s.add([x <= 10, x >= 10]); print(s); print(s.check()); if s.check()==z3.sat: print(int(str(s.model()[x]))) #Int is sometimes slow, but also sometimes Real doesn't give you what you want
 # import lmfit # try z3 first please
 # from sympy import * # x,y=symbols('x y'); print(solve([x <= 10, x >= 10]))
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area)
 # from testtemplate import *
 
 data1='''
-
 '''.strip('\n').splitlines()
 data2='''
-
 '''.strip('\n').splitlines()
 
-data=data1
+data=data2
 
 # data = [int(line) for line in data]; H=len(data)
-# data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]; W,H=len(data[0]),len(data)
+data = [[column for column in re.findall('\S+', line)] for line in data]; W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line] for line in data]; W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line.split(',')] for line in data]; W,H=len(data[0]),len(data)
 # data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
 # python threads are not real:  thread=threading.Thread(target=lambda line: print(line), args=(line)); thread.start(); thread.join() # does not run in parallel on separate cores
 
+ans=0
+for line in data:
+	_=line.pop(0)
+	buttons=[]
+	while line[0][0]=='(':
+		b=line.pop(0)
+		b=b.replace('(','').replace(')','').split(',')
+		b=[int(b) for b in b]
+		buttons.append(b)
+	joltage=line[0]
+	joltage=joltage.replace('{','').replace('}','').split(',')
+	joltage=[int(j) for j in joltage]
+	presses=[set() for i in range(50)]
+	presses[0].add(tuple(joltage))
 
+	s = Optimize()
+	params=[]
+	for i in range(len(buttons)):
+		a = Int('a%d'%i)
+		s.add([a >= 0, a <= 300])
+		params.append(a)
+	rev=[[] for i in range(len(joltage))]
+	for i in range(len(buttons)):
+		for n in buttons[i]:
+			rev[n].append(i)
+	for i, r in enumerate(rev):
+		s.add(sum([params[r] for r in r]) == joltage[i])
+	s.minimize(sum(params))
+	if s.check()==z3.sat:
+		m=s.model()
+		# print(m)
+		ans+=sum(int(str(m[x])) for x in params)
+
+	# done=False
+	# for num in range(len(presses)):
+	# 	curJoltages=presses[num]
+	# 	print(num, len(curJoltages))
+	# 	for curJoltage in curJoltages:
+	# 		for b in buttons:
+	# 			newJoltage=list(curJoltage)
+	# 			done=True
+	# 			good=True
+	# 			for n in b:
+	# 				if newJoltage[n]==0:
+	# 					good=False
+	# 					break
+	# 				newJoltage[n]-=1
+	# 			if good:
+	# 				done=all(n==0 for n in newJoltage)
+	# 				if done:
+	# 					print('done', num+1)
+	# 					ans+=num+1
+	# 					break
+	# 				presses[num+1].add(tuple(newJoltage))
+	# 			done=False
+	# 		if done: break
+	# 	if done: break
+
+	# import numpy as np
+	# from lmfit import minimize, Parameters, Parameter, report_fit
+	#
+	# def fit(params, joltage):
+	# 	joltage=joltage[:]
+	# 	a=[]
+	# 	for i in range(len(buttons)):
+	# 		p=params['a%d'%(i)]+0
+	# 		a.append(abs(p-round(p)))
+	# 		a.append(p/100)
+	# 		for n in buttons[i]:
+	# 			joltage[n]-=p
+	# 	a.extend(joltage)
+	# 	# print([params['a%d'%(i)]+0 for i in range(len(buttons))], sum(a), a)
+	# 	return a
+	#
+	# params = Parameters()
+	# for i in range(len(buttons)):
+	# 	params.add('a%d'%(i), value=1, min = 0, max = 300)
+	# result = minimize(fit, params, args=(joltage,), method='leastsq')
+	# print(fit(result.params, joltage))
+	# print()
+	# m=0
+	# for i in range(len(buttons)):
+	# 	r=result.params['a%d'%(i)]+0
+	# 	print(r, end=' ')
+	# 	m+=round(r)
+	# print(m)
+	# print()
+	# ans+=m
+	# # report_fit(result)
+print(ans)
+
+
+# ans=0
 # for line in data:
-
-
+# 	state=line.pop(0)
+# 	state=state.replace('[','').replace(']','')
+# 	state=[s=='#' for s in state]
+# 	buttons=[]
+# 	while line[0][0]=='(':
+# 		b=line.pop(0)
+# 		b=b.replace('(','').replace(')','').split(',')
+# 		b=[int(b) for b in b]
+# 		buttons.append(b)
+# 	m=math.inf
+#
+# 	for i in range(1<<len(buttons)):
+# 		curState=state[:]
+# 		cur=0
+# 		k=i
+# 		changes=0
+# 		for j in range(len(buttons)):
+# 			if k&1!=0:
+# 				changes+=1
+# 				for n in buttons[j]:
+# 					curState[n]=not curState[n]
+# 			k>>=1
+# 		if all(curState[n]==False for n in range(len(state))):
+# 			if changes<m:
+# 				m=changes
+# 	print(state, buttons, m)
+# 	ans+=m
+# print(ans)
 
 # dir = (dir+4)%4
 # dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][dir] # clockwise, starting right
