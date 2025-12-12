@@ -12,9 +12,9 @@ sys.setrecursionlimit(100000)
 # from sortedcontainers import SortedList #SortedList('bat') + 'cat'
 # from astar import AStar #see astarExample.py
 # from collections import defaultdict, deque, Counter
-# from z3.z3 import * # s = Solver(); x = Real('x'); y = Real('y'); s.add([x <= 10, x >= 10]); print(s); print(s.check()); if s.check()==z3.sat: print(int(str(s.model()[x]))) #Int is sometimes slow, but also sometimes Real doesn't give you what you want
-# import lmfit # try z3 first please
+# from z3.z3 import * # s = Solver(); x = Real('x'); y = Real('y'); s.add([x <= 10, x >= 10]); print(s); MAYBE s.minimize(sum(params)); print(s.check()); if s.check()==z3.sat: print(int(str(s.model()[x]))) #Int is sometimes slow, but also sometimes Real doesn't give you what you want
 # from sympy import * # x,y=symbols('x y'); print(solve([x <= 10, x >= 10]))
+# import lmfit # try z3 or sympy first please
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area)
 # from testtemplate import *
 
