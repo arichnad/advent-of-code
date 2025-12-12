@@ -39,12 +39,12 @@ data=data2
 s=[]
 v=set()
 # for line in data:
-for index in range(6):
+SHAPES=6
+for index in range(SHAPES):
 	data.pop(0)
 	sh=[[ch for ch in data.pop(0)] for row in range(3)]
 	s.append([(
-		# {index: 1},
-		(3, 3),
+		[0 if i!=index else 1 for i in range(SHAPES)],
 		sh,
 	)])
 	t=tuple(tuple(s) for s in sh)
@@ -53,40 +53,35 @@ for index in range(6):
 	data.pop(0)
 
 for index in range(len(s)):
-	sS,sh=s[index][0]
+	sManifest,sh=s[index][0]
 	sh=[[sh[j][2-i] for i in range(3)] for j in range(3)]
 	t=tuple(tuple(s) for s in sh)
 	if t in v: continue
 	v.add(t)
-	s[index].append((sS,sh))
+	s[index].append((sManifest, sh))
 for index in range(len(s)):
-	for sS,sh in s[index].copy():
+	for sManifest,sh in s[index].copy():
 		for rotation in range(3):
 			sh=[[sh[i][2-j] for i in range(3)] for j in range(3)]
 			t=tuple(tuple(s) for s in sh)
 			if t in v: continue
 			v.add(t)
-			s[index].append((sS,sh))
+			s[index].append((sManifest, sh))
 
 for index in range(len(s)):
 	print(index)
-	for sS,sh in s[index]:
+	for sManifest,sh in s[index]:
 		for row in sh:
 			print(''.join(row))
 		print()
 
-def merge(a, b):
-	output=a.copy()
-	for k,v in b.items():
-		if k not in output: output[k]=0
-		output[k]+=v
-	return output
-
 def combine(aShape, bShape):
 	global checkHeight,checkWidth,visited
-	(aHeight,aWidth),a = aShape
-	(bHeight,bWidth),b = bShape
-	# combinedManifest = merge(aManifest, bManifest)
+	aManifest,a = aShape
+	bManifest,b = bShape
+	aHeight,aWidth = len(a),len(a[0])
+	bHeight,bWidth = len(b),len(b[0])
+	combinedManifest = [a+b for a,b in zip(aManifest,bManifest)]
 	output = []
 	for dy in range(-bHeight, aHeight+1):
 		for dx in range(-bWidth, aWidth+1):
@@ -118,8 +113,10 @@ def combine(aShape, bShape):
 				for x in range(bWidth):
 					if b[y][x]=='#':
 						newShape[y+bShiftY][x+bShiftX]='#'
-			t=tuple(tuple(s) for s in sh)
-			output.append(((height,width), newShape))
+			t=(tuple(combinedManifest), (tuple(s) for s in newShape))
+			if t in visited: continue
+			visited.add(t)
+			output.append((combinedManifest, newShape))
 	return output
 
 answer=0
@@ -127,9 +124,10 @@ for line in data:
 	if line=='': continue
 	line=[int(ch) for ch in re.findall('-?\d+', line)]
 	checkWidth,checkHeight=line.pop(0),line.pop(0)
-	# print(checkWidth, checkHeight, line)
+
 	# pool=[]
 	# visited=set()
+	# start=time.perf_counter()
 	# for index,count in enumerate(line):
 	# 	for c in range(count):
 	# 		newPool=[]
@@ -139,9 +137,11 @@ for line in data:
 	# 			else:
 	# 				for currentShape in pool:
 	# 					newPool.extend(combine(currentShape, shape))
+	# 			print('add', index, len(newPool), time.perf_counter()-start)
 	# 		pool=newPool
-	# 		print('added shape ', index, len(pool))
+	# 		print('### done adding shape ', index, len(pool), time.perf_counter()-start)
 	# print('done', len(pool))
+
 	space=0
 	for index,count in enumerate(line):
 		space+=sum(sum(count if ch=='#' else 0 for ch in row) for row in s[index][0][1])
