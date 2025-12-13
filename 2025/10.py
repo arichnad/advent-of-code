@@ -12,7 +12,7 @@ sys.setrecursionlimit(100000)
 # from sortedcontainers import SortedList #SortedList('bat') + 'cat'
 # from astar import AStar #see astarExample.py
 # from collections import defaultdict, deque, Counter
-from z3.z3 import * # s = Solver(); x = Real('x'); y = Real('y'); s.add([x <= 10, x >= 10]); print(s); print(s.check()); if s.check()==z3.sat: print(int(str(s.model()[x]))) #Int is sometimes slow, but also sometimes Real doesn't give you what you want
+# from z3.z3 import * # s = Solver(); x = Real('x'); y = Real('y'); s.add([x <= 10, x >= 10]); print(s); print(s.check()); if s.check()==z3.sat: print(int(str(s.model()[x]))) #Int is sometimes slow, but also sometimes Real doesn't give you what you want
 # import lmfit # try z3 first please
 # from sympy import * # x,y=symbols('x y'); print(solve([x <= 10, x >= 10]))
 # from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area)
@@ -32,8 +32,52 @@ data = [[column for column in re.findall('\S+', line)] for line in data]; W,H=le
 # data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
 # python threads are not real:  thread=threading.Thread(target=lambda line: print(line), args=(line)); thread.start(); thread.join() # does not run in parallel on separate cores
 
+
+# import numpy as np
+#
+# def getAInverse(guesses, buttons, joltage):
+# 	buttonsSize = len(buttons)
+# 	joltageSize = len(joltage)
+#
+# 	# if guesses is more than the difference between sizes of joltage and buttons, we'll probaly write over the end of the list
+# 	A=[[1 if j in buttons[i] else 0 for i in range(buttonsSize)] for j in range(buttonsSize)]
+#
+# 	# linear algebra!  system of linear equations:   A * x = joltage
+# 	# A = the equations
+# 	# x = the answers
+# 	# b = the right side of all those equations
+# 	# x = aInverse * joltage
+#
+# 	#if buttonsSize > len(joltage), fill in the last few rows with guesses
+#
+# 	for i in range(guesses):
+# 		j=joltageSize + i
+# 		A[j][i]=1
+#
+# 	#make joltage vertical, and either crop it to buttonsSize or fill in zeros at the end
+# 	paddedJoltage = np.pad(np.array(joltage).reshape(joltageSize, 1), ((0, guesses), (0,0)))
+#
+# 	for r in A:
+# 		print(' '.join(str(r) for r in r))
+# 	print()
+# 	print(paddedJoltage)
+# 	print()
+#
+# 	A = np.array(A)
+# 	determinant = np.linalg.det(A)
+# 	if determinant == 0:
+# 		#ooof, let's add a guess
+# 		return getAInverse(guesses+1, buttons, joltage)
+# 	print()
+# 	aInverse = np.linalg.inv(np.array(A))
+#
+# 	return guesses, aInverse, paddedJoltage
+
+
 ans=0
-for line in data:
+MAX_SCORE=1_000_000
+start = time.perf_counter()
+for n, line in enumerate(data):
 	_=line.pop(0)
 	buttons=[]
 	while line[0][0]=='(':
@@ -44,26 +88,107 @@ for line in data:
 	joltage=line[0]
 	joltage=joltage.replace('{','').replace('}','').split(',')
 	joltage=[int(j) for j in joltage]
-	presses=[set() for i in range(50)]
-	presses[0].add(tuple(joltage))
+	# presses=[set() for i in range(50)]
+	# presses[0].add(tuple(joltage))
+	buttonsSize = len(buttons)
+	joltageSize = len(joltage)
 
-	s = Optimize()
-	params=[]
-	for i in range(len(buttons)):
-		a = Int('a%d'%i)
-		s.add([a >= 0, a <= 300])
-		params.append(a)
-	rev=[[] for i in range(len(joltage))]
-	for i in range(len(buttons)):
-		for n in buttons[i]:
-			rev[n].append(i)
-	for i, r in enumerate(rev):
-		s.add(sum([params[r] for r in r]) == joltage[i])
-	s.minimize(sum(params))
-	if s.check()==z3.sat:
-		m=s.model()
-		# print(m)
-		ans+=sum(int(str(m[x])) for x in params)
+	buttonsReversed = [[1 if j in buttons[i] else 0 for i in range(buttonsSize)] for j in range(joltageSize)]
+
+	pool=[]
+
+	previousButtonPresses=0
+	while True:
+		for j in range(10_000 if len(pool)==0 else 0):
+			newEntry=[random.randrange(max(joltage)) for i in range(buttonsSize)]
+			score = max(MAX_SCORE - sum(abs(sum(buttonsReversed[j][i] * newEntry[i] for i in range(buttonsSize)) - joltage[j]) for j in range(joltageSize)), 0)
+			buttonPresses = sum(newEntry)
+			pool.append((score, -buttonPresses, newEntry))
+		pool=sorted(pool, reverse=True)[0:1_000]
+		(bestScore, bestButtonPresses, bestEntry)=pool[0]
+
+		# newPool=[]
+		# sumScores=sum(p[0] for p in pool)
+		# for addToPool in range(1_000):
+		# 	pick = random.randrange(sumScores)
+		# 	for (score, buttonPresses, entry) in pool:
+		# 		pick -= score
+		# 		if pick <= 0:
+		# 			newPool.append((score, buttonPresses, entry))
+		# 			break
+		# pool=newPool
+		#
+		# bestScore=-1
+		# for (score, buttonPresses, entry) in pool:
+		# 	if score>bestScore or (score==bestScore and buttonPresses < bestButtonPresses):
+		# 		(bestScore, bestButtonPresses, bestEntry)=(score, buttonPresses, entry)
+
+		# print('  ', n, bestScore, bestButtonPresses, bestEntry, '%.2f'%((time.perf_counter()-start)/(n+1)))
+		if bestScore==MAX_SCORE:
+			if previousButtonPresses==bestButtonPresses:
+				break
+			previousButtonPresses=bestButtonPresses
+		for i in range(len(pool)):
+			for copy in range(10):
+				(_, _, entry)=pool[i]
+				newEntry=entry[:]
+				for index in range(len(entry)):
+					val = random.randint(-1, 1)
+					newEntry[index]+=val
+					newEntry[index]=max(min(newEntry[index],300), 0)
+				score = max(MAX_SCORE - sum(abs(sum(buttonsReversed[j][i] * newEntry[i] for i in range(buttonsSize)) - joltage[j]) for j in range(joltageSize)), 0)
+				buttonPresses = sum(newEntry)
+				pool.append((score, -buttonPresses, newEntry))
+	print(n, -bestButtonPresses, '%.2f'%((time.perf_counter()-start)/(n+1)))
+	ans+=-bestButtonPresses
+
+
+	# # ok, let's do this without z3!
+	# # reorganize the information in the buttons array
+	#
+	# #NOTE:  if buttonsSize > len(joltage) then the last few buttons will have zeros in them
+	# #NOTE:  if buttonsSize < len(joltage) then maybe we crop off a few joltage rows???  i'm not sure.
+	#
+	# guesses = max(buttonsSize-len(joltage), 0)
+	#
+	# guesses, aInverse, paddedJoltage = getAInverse(guesses, buttons, joltage)
+	#
+	# MAX = 300
+	#
+	# best=math.inf
+	# for guess in itertools.product(range(0, MAX), repeat=guesses):
+	# 	for i, j in enumerate(guess):
+	# 		paddedJoltage[len(joltage) + i][0]=j
+	# 	# print(guess, paddedJoltage)
+	#
+	# 	possibleAnswer = np.matmul(aInverse, paddedJoltage)
+	# 	if any(possibleAnswer < 0):
+	# 		continue
+	# 	possibleAnswer = round(sum(sum(possibleAnswer)))
+	#
+	# 	if possibleAnswer < best:
+	# 		best=possibleAnswer
+	# print(best)
+	# ans+=best
+
+
+	# s = Optimize()
+	# params=[]
+	# for i in range(len(buttons)):
+	# 	a = Int('a%d'%i)
+	# 	s.add([a >= 0, a <= 300])
+	# 	params.append(a)
+	# rev=[[] for i in range(len(joltage))]
+	# for i in range(len(buttons)):
+	# 	for n in buttons[i]:
+	# 		rev[n].append(i)
+	# for i, r in enumerate(rev):
+	# 	s.add(sum([params[r] for r in r]) == joltage[i])
+	# s.minimize(sum(params))
+	# if s.check()==z3.sat:
+	# 	m=s.model()
+	# 	print(sum(int(str(m[x])) for x in params))
+	# 	ans+=sum(int(str(m[x])) for x in params)
 
 	# done=False
 	# for num in range(len(presses)):
