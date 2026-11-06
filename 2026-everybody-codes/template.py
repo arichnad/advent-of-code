@@ -23,6 +23,9 @@ data1='''
 data2='''
 
 '''.strip('\n').splitlines()
+data3='''
+
+'''.strip('\n').splitlines()
 
 data=data1
 # import fileinput # data=[a.strip('\n') for a in fileinput.input()]
