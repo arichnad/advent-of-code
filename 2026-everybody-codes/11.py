@@ -38,50 +38,40 @@ data = [[int(column) for column in re.findall('-?\d+', line)] for line in data];
 portals=data[0][0]
 data.pop(0)
 data.pop(0)
-d={}
-
-for i in range(portals):
-	for j in range(portals):
-		d[(i, j)]=math.inf
+d=[[math.inf for i in range(portals)] for j in range(portals)]
 
 
 for i in range(portals):
 	for j in range(1, 4):
 		k=(i+j)%portals
-		d[(i, k)]=1
-		d[(k, i)]=1
+		d[i][k]=d[k][i]=1
 		k=(i+portals-j)%portals
-		d[(i, k)]=1
-		d[(k, i)]=1
+		d[i][k]=d[k][i]=1
 
 for y in range(portals):
 	for x in range(portals):
 		if x == y: continue
 		for z in range(portals):
-			if x!=y and y!=z and x!=z and d[(x, y)]+d[(y, z)]<d[(x, z)]:
-				d[(x, z)] = d[(x, y)]+d[(y, z)]
-output=0
-for i in range(portals):
-	for j in range(portals):
-		if i==j: continue
-		output+=d[(i, j)]
+			if y!=z and x!=z and d[x][y]+d[y][z]<d[x][z]:
+				d[x][z] = d[x][y]+d[y][z]
+
+output=sum(d[i][j] for i in range(portals) for j in range(portals) if i!=j)
 
 for (f, t) in data:
 	f-=1
 	t-=1
-	d[(f, t)]=1
-	d[(t, f)]=1
+	d[f][t]=d[t][f]=1
 
 for y in range(portals):
 	for x in range(portals):
 		if x == y: continue
 		for z in range(portals):
-			if y!=z and x!=z and d[(x, y)]+d[(y, z)]<d[(x, z)]:
-				d[(x, z)] = d[(x, y)]+d[(y, z)]
+			if y!=z and x!=z and d[x][y]+d[y][z]<d[x][z]:
+				d[x][z] = d[x][y]+d[y][z]
 
 
 bestRes=None
-dCopy=dict(d)
+dCopy=copy.deepcopy(d)
 x=0
 p=portals//8
 l=[]
@@ -92,23 +82,19 @@ for b in list(itertools.permutations(range(8), 8)):
 for a in range(p):
 	print(a)
 	for b in l:
-		d = dict(dCopy)
+		d = copy.deepcopy(dCopy)
 		for i in range(4):
 			f = (b[i*2]*p + a) % portals
 			t = (b[i*2+1]*p + a) % portals
-			d[(f, t)]=1
-			d[(t, f)]=1
+			d[f][t]=d[t][f]=1
+		
 		for y in range(portals):
 			for x in range(portals):
 				if x==y: continue
 				for z in range(portals):
-					if y != z and x!=z and d[(x, y)] + d[(y, z)] < d[(x, z)]:
-						d[(x, z)] = d[(x, y)] + d[(y, z)]
-		res=0
-		for i in range(portals):
-			for j in range(portals):
-				if i!=j:
-					res+=d[(i, j)]
+					if y!=z and x!=z and d[x][y]+d[y][z]<d[x][z]:
+						d[x][z] = d[x][y]+d[y][z]
+		res=sum(d[i][j] for i in range(portals) for j in range(portals) if i!=j)
 		# print(a, b, res)
 		if bestRes is None or res<bestRes: bestRes=res
 
