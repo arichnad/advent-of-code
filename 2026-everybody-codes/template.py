@@ -57,61 +57,85 @@ data=data1
 # 			for dx in range(-1, 2):
 # 				# if dx==0 and dy==0: continue
 # 				if abs(dx)+abs(dy)!=1: continue
-# 
+#
 # 				newY,newX=j+dy,i+dx
-# 				if newY<0 or newX<0 or newY>=H or newX>=W: continue
-# 
+# 				if newY<0 or newY>=H or newX<0 or newX>=W: continue
+#
 # for line in data: print(''.join(line))
 
-# bfs simple queue
+# bfs simple queue (sorting slows things down some, you can remove sort if costs go up by the same every round)
 # for j in range(H):
 # 	for i in range(W):
 # 		if data[j][i]=='S': startY,startX=j,i
 # 		if data[j][i]=='E': endY,endX=j,i
-# positions = [(0, startY, startX)]
+# positions = [(0, (startY, startX))]
+# endPoint = (endY, endX)
 # costs={}
 # while len(positions) > 0:
 # 	# print(len(positions))
 # 	newPositions = []
-# 	for (cost, y, x) in sorted(positions): # remove sorted here if it's not needed
-# 		if y<0 or y>=H or x<0 or x>=W: continue
-# 		if data[y][x] == '#': continue
-# 		if y==endY and x==endX:
-# 			print(cost)
-# 			newPositions=[]
-# 			break
-# 		if (y, x) in costs and cost >= costs[(y, x)]: continue # change >= here to > if you need to analyze ties
-# 		costs[(y, x)] = cost
-# 
+# 	for (cost, point) in sorted(positions): # remove sorted here if cost goes up by the same every round
+# 		(y, x) = point
+#
+# 		costKey = point
+# 		if costKey in costs and cost >= costs[costKey]: continue # change >= here to > if you need to analyze ties
+# 		costs[costKey] = cost
+#
 # 		for dy in range(-1, 2):
 # 			for dx in range(-1, 2):
 # 				# if dx==0 and dy==0: continue
-# 				if abs(dx)+abs(dy)!=1: continue
-# 				newPositions.append((cost + 1, y+dy, x+dx))
+# 				if abs(dx)+abs(dy) != 1: continue
+# 				ny,nx = y+dy,x+dx
+# 				if ny < 0 or ny >= H or nx < 0 or nx >= W: continue
+# 				if data[ny][nx] == '#': continue
+#
+# 				newCost = cost + 1
+# 				newPoint = (ny, nx)
+#
+# 				if newPoint == endPoint:
+# 					print(newCost)
+# 					sys.exit(0)
+#
+# 				newPositions.append((newCost, newPoint))
 # 	positions=newPositions
 
 
-# bfs (priority queue)
+# bfs with a heap (fast sorting)
 # for j in range(H):
 # 	for i in range(W):
 # 		if data[j][i]=='S': startY,startX=j,i
 # 		if data[j][i]=='E': endY,endX=j,i
-# positions = [(0, startY, startX)]
+# positions = [(0, (startY, startX))]
+# endPoint = (endY, endX)
 # costs={}
 # while len(positions) > 0:
-# 	(cost, y, x) = heapq.heappop(positions)
-# 	if y<0 or y>=H or x<0 or x>=W: continue
-# 	if data[y][x]=='#': continue
-# 	if (y, x) in costs and cost >= costs[(y, x)]: continue
-# 	costs[(y, x)] = cost
-# 	
+# 	(cost, point) = heapq.heappop(positions)
+# 	(y, x) = point
+#
+# 	costKey = point
+# 	if costKey in costs and cost >= costs[costKey]:
+# 		continue
+# 	costs[costKey] = cost
+#
 # 	for dy in range(-1, 2):
 # 		for dx in range(-1, 2):
 # 			# if dx==0 and dy==0: continue
 # 			if abs(dx)+abs(dy)!=1: continue
-# 			if (y+dy, x+dx) in costs and cost+1 >= costs[(y+dy, x+dx)]: continue
-# 			heapq.heappush(positions, (cost+1, y+dy, x+dx))
-# print(costs[(endY, endX)])
+# 			ny,nx = y+dy,x+dx
+# 			if ny < 0 or ny >= H or nx < 0 or nx >= W: continue
+# 			if data[ny][nx] == '#': continue
+#
+# 			newCost = cost+1
+# 			newPoint = (ny, nx)
+#
+# 			if newPoint==endPoint:
+# 				print(newCost)
+# 				sys.exit(0)
+#
+# 			costKey = newPoint
+# 			if costKey in costs and newCost >= costs[costKey]: continue
+#
+# 			heapq.heappush(positions, (newCost, newPoint))
 
 # flood fill does NOT work when want a breadth first (minimum cost, that sort of thing)
 # for j in range(H):
@@ -119,18 +143,23 @@ data=data1
 # 		if data[j][i]=='S': startY,startX=j,i
 # 		if data[j][i]=='E': endY,endX=j,i
 # visited=set()
-# def ff(y, x):
-# 	if y<0 or x<0 or y>=H or x>=W: return 0
-# 	if data[y][x] == '#' or (y, x) in visited: return 0
+# def ff(point):
+# 	(y, x) = point
+# 	if (y, x) in visited: return 0
 # 	visited.add((y, x))
-# 
+#
 # 	answer=1
 # 	for dy in range(-1, 2):
 # 		for dx in range(-1, 2):
 # 			# if dx==0 and dy==0: continue
 # 			if abs(dx)+abs(dy)!=1: continue
-# 			answer+=ff(y+dy, x+dx)
+# 			ny,nx = y+dy,x+dx
+# 			if ny < 0 or ny >= H or nx < 0 or nx >= W: continue
+# 			if data[ny][nx] == '#': continue
+#
+# 			newPoint = (ny, nx)
+# 			answer+=ff(newPoint)
 # 	return answer
-# 
-# print(ff(startY, startX))
+#
+# print(ff((startY, startX), ))
 
