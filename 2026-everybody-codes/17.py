@@ -19,27 +19,102 @@ sys.setrecursionlimit(100000)
 # from testtemplate import *
 
 data1='''
-
 '''.strip('\n').splitlines()
 data2='''
-
 '''.strip('\n').splitlines()
 data3='''
 
 '''.strip('\n').splitlines()
 
-data=data1
+data=data2
 # import fileinput # data=[a.strip('\n') for a in fileinput.input()]
 
 # data = [int(line) for line in data]; H=len(data)
 # data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]; W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line] for line in data]; W,H=len(data[0]),len(data)
 # data = [[int(column) for column in line.split(',')] for line in data]; W,H=len(data[0]),len(data)
-# data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
+data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
 # python threads are not real:  thread=threading.Thread(target=lambda line: print(line), args=(line)); thread.start(); thread.join() # does not run in parallel on separate cores
 
 
-# for line in data:
+
+
+best=None
+for a,b in [(1, 3), (3, 1)]:
+	answer=0
+	y,x,dir=0,0,a
+	while not (y==H-1 and x==W-1 and dir==b):
+		check = (dir+a)%4
+		dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][check]
+		ny,nx,ndir=y+dy,x+dx,check
+		if ny<0 or ny>=H or nx<0 or nx>=W or data[ny][nx]=='.':
+			answer+=1
+			dir=(dir+b)%4
+			continue
+		else:
+			y,x,dir=ny,nx,ndir
+			# print(y,x,dir,answer)
+			continue
+	if best is None or answer<best:
+		best=answer
+	print(answer)
+print(best)
+# y,x,dir=0,0,1
+# answer=0
+# first=True
+# while first or not (y==0 and x==0 and dir==1):
+# 	print(y,x,dir,answer)
+# 	first=False
+# 	check = (dir+1)%4
+# 	dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][check]
+# 	ny,nx,ndir=y+dy,x+dx,check
+# 	if ny<0 or ny>=H or nx<0 or nx>=W or data[ny][nx]=='.':
+# 		answer+=1
+# 		dir=(dir+3)%4
+# 		continue
+# 	else:
+# 		y,x,dir=ny,nx,ndir
+# 		print(y,x,dir,answer)
+# 		continue
+# print(answer)
+
+
+
+# startX,startY=0,0
+# endX,endY=W-1,H-1
+# positions = [(0, (startY, startX))]
+# endPoint = (endY, endX)
+# costs={}
+# while len(positions) > 0:
+# 	(cost, point) = heapq.heappop(positions)
+# 	(y, x) = point
+#
+# 	costKey = point
+# 	if costKey in costs and cost >= costs[costKey]:
+# 		continue
+# 	costs[costKey] = cost
+#
+# 	for dy in range(-1, 2):
+# 		for dx in range(-1, 2):
+# 			# if dx==0 and dy==0: continue
+# 			if abs(dx)+abs(dy)!=1: continue
+# 			ny,nx = y+dy,x+dx
+# 			if ny < 0 or ny >= H or nx < 0 or nx >= W: continue
+# 			if data[ny][nx] == '.': continue
+#
+# 			newCost = cost+1
+# 			newPoint = (ny, nx)
+#
+# 			if newPoint==endPoint:
+# 				print(newCost)
+# 				sys.exit(0)
+#
+# 			costKey = newPoint
+# 			if costKey in costs and newCost >= costs[costKey]: continue
+#
+# 			heapq.heappush(positions, (newCost, newPoint))
+# print(costs[(endY, endX)])
+
 
 
 
@@ -101,41 +176,6 @@ data=data1
 
 
 # bfs with a heap (fast sorting)
-# for j in range(H):
-# 	for i in range(W):
-# 		if data[j][i]=='S': startY,startX=j,i
-# 		if data[j][i]=='E': endY,endX=j,i
-# positions = [(0, (startY, startX))]
-# endPoint = (endY, endX)
-# costs={}
-# while len(positions) > 0:
-# 	(cost, point) = heapq.heappop(positions)
-# 	(y, x) = point
-#
-# 	costKey = point
-# 	if costKey in costs and cost >= costs[costKey]:
-# 		continue
-# 	costs[costKey] = cost
-#
-# 	for dy in range(-1, 2):
-# 		for dx in range(-1, 2):
-# 			# if dx==0 and dy==0: continue
-# 			if abs(dx)+abs(dy)!=1: continue
-# 			ny,nx = y+dy,x+dx
-# 			if ny < 0 or ny >= H or nx < 0 or nx >= W: continue
-# 			if data[ny][nx] == '#': continue
-#
-# 			newCost = cost+1
-# 			newPoint = (ny, nx)
-#
-# 			if newPoint==endPoint:
-# 				print(newCost)
-# 				sys.exit(0)
-#
-# 			costKey = newPoint
-# 			if costKey in costs and newCost >= costs[costKey]: continue
-#
-# 			heapq.heappush(positions, (newCost, newPoint))
 
 # flood fill does NOT work when want a breadth first (minimum cost, that sort of thing)
 # for j in range(H):
