@@ -81,9 +81,9 @@ data6='''
 
 
 
-# data=[c for c in data6[0]]
-data=[c for c in data6[0]]*100
-# data=[c for c in data2[0]]*100
+# data=[c for c in data4[0]]
+# data=[c for c in data6[0]]*100
+data=[c for c in data2[0]]*100
 # import fileinput # data=[a.strip('\n') for a in fileinput.input()]
 
 # data = [int(line) for line in data]; H=len(data)
@@ -101,63 +101,34 @@ answer=0
 j=0
 start,end=0,len(data)-1
 
-ending=[]
-# ending=collections.deque()
+ending=collections.deque()
 round=0
 data=collections.deque(data)
 beginning=None
-cur=data.popleft()
-side=0
 answer=0
-while True:
-	otherSide=-1-side
-	while len(data)>=1 and data[side]==cur:
-		data.popleft() if side == 0 else data.pop()
+while len(data)>=1:
+	cur=data[0]
+	side=0
+	first=True
+	while len(data)>=1:
 
-	while len(data)>=1 and data[otherSide]!=cur:
-		value=data[otherSide]
-		while len(data)>=1 and data[otherSide]==value:
-			data.popleft() if otherSide == 0 else data.pop()
-			ending.append(value)
+		otherSide=-1-side
+		if not first: answer += len(data)
+		first=False
 
-	count=0
-	while len(data)>=1 and data[otherSide]==cur:
-		value=data.popleft() if otherSide == 0 else data.pop()
-		count+=1
-		ending.append(cur)
-
-	if count==0:
-		if len(data)==0:
-			data=collections.deque(ending)
-			ending=[]
-			# data = ending
-			# ending = collections.deque()
-			print('done no more data', round+1)
-			if len(data)==0:
-				break
-
-		cur=data.popleft() if side == 0 else data.pop()
 		while len(data)>=1 and data[side]==cur:
-			data.popleft() if side == 0 else data.pop()
+			data.popleft() if side==0 else data.pop()
 
-		print('done', round+1)
-		continue
+		while len(data)>=1 and data[otherSide]!=cur:
+			ending.append(data.popleft() if otherSide==0 else data.pop())
 
-	index = None
-	for i in range(len(ending)):
-		if ending[i][0]==cur:
-			index = i
-			break
-	width = len(ending) - index
-	answer+= len(data) + width
-	ending=ending[:index]
-
-	round+=1
-	side=otherSide
-
-	if round%1000==0:
-		# print(round+1, ''.join(data if side==0 else reversed(data))+''.join(reversed(ending)))
-		print(round, len(data), len(ending))
+		side=otherSide
+		round+=1
+		if round%1000==0:
+			# print(round+1, ''.join(data if side==0 else reversed(data))+''.join(reversed(ending)))
+			print(round, len(data), len(ending))
+	data=ending
+	ending=collections.deque()
 print(round, answer)
 sys.exit(0)
 
