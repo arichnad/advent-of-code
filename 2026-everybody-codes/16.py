@@ -101,7 +101,8 @@ answer=0
 j=0
 start,end=0,len(data)-1
 
-ending=collections.deque()
+ending=[]
+# ending=collections.deque()
 round=0
 data=collections.deque(data)
 beginning=None
@@ -115,32 +116,22 @@ while True:
 
 	while len(data)>=1 and data[otherSide]!=cur:
 		value=data[otherSide]
-		count=0
 		while len(data)>=1 and data[otherSide]==value:
 			data.popleft() if otherSide == 0 else data.pop()
-			count+=1
-		if len(ending)==0 or ending[-1][0] != value:
-			if count>0:
-				ending.append((value, count))
-		else:
-			ending[-1]=(ending[-1][0], ending[-1][1]+count)
+			ending.append(value)
 
 	count=0
 	while len(data)>=1 and data[otherSide]==cur:
 		value=data.popleft() if otherSide == 0 else data.pop()
 		count+=1
-	if len(ending)==0 or ending[-1][0] != cur:
-		if count>0:
-			ending.append((cur, count))
-	else:
-		ending[-1]=(ending[-1][0], ending[-1][1]+count)
+		ending.append(cur)
 
 	if count==0:
 		if len(data)==0:
-			data=collections.deque()
-			for e in ending:
-				data.extend([e[0]]*e[1])
+			data=collections.deque(ending)
 			ending=[]
+			# data = ending
+			# ending = collections.deque()
 			print('done no more data', round+1)
 			if len(data)==0:
 				break
@@ -152,14 +143,14 @@ while True:
 		print('done', round+1)
 		continue
 
-	index2 = None
+	index = None
 	for i in range(len(ending)):
 		if ending[i][0]==cur:
-			index2 = i
+			index = i
 			break
-	width = sum(i[1] for i in ending[index2:])
+	width = len(ending) - index
 	answer+= len(data) + width
-	ending=ending[:index2]
+	ending=ending[:index]
 
 	round+=1
 	side=otherSide
