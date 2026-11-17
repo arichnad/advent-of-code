@@ -101,88 +101,72 @@ answer=0
 j=0
 start,end=0,len(data)-1
 
-ending=[]
+ending=collections.deque()
 round=0
 data=collections.deque(data)
 beginning=None
-dataLength=len(data)
-input=collections.deque()
-for j in range(len(data)):
-	if j==0 or data[j-1]!=data[j]:
-		if beginning is not None:
-			input.append((data[j - 1], j - beginning))
-		beginning=j
-input.append((data[-1], len(data) - beginning))
-cur=input.popleft()
-dataLength -= cur[1]
+cur=data.popleft()
 side=0
 answer=0
 while True:
 	otherSide=-1-side
+	while len(data)>=1 and data[side]==cur:
+		data.popleft() if side == 0 else data.pop()
 
-	while len(input)>=1 and input[side][0]==cur[0]:
-		dataLength -= input[side][1]
-		input.popleft() if side == 0 else input.pop()
-
-	while len(input)>=1 and input[otherSide][0]!=cur[0]:
-		value=input[otherSide]
+	while len(data)>=1 and data[otherSide]!=cur:
+		value=data[otherSide]
 		count=0
-		while len(input)>=1 and input[otherSide][0]==value[0]:
-			count+=input[otherSide][1]
-			dataLength -= input[otherSide][1]
-			value = input.popleft() if otherSide == 0 else input.pop()
-		if len(ending)==0 or ending[-1][0] != value[0]:
+		while len(data)>=1 and data[otherSide]==value:
+			data.popleft() if otherSide == 0 else data.pop()
+			count+=1
+		if len(ending)==0 or ending[-1][0] != value:
 			if count>0:
-				ending.append((value[0], count))
+				ending.append((value, count))
 		else:
-			ending[-1]=(ending[-1][0], ending[-1][1] + count)
+			ending[-1]=(ending[-1][0], ending[-1][1]+count)
 
 	count=0
-	while len(input)>=1 and input[otherSide][0]==cur[0]:
-		dataLength -= input[otherSide][1]
-		count+=input[otherSide][1]
-		input.popleft() if otherSide == 0 else input.pop()
-	if len(ending)==0 or ending[-1][0] != cur[0]:
+	while len(data)>=1 and data[otherSide]==cur:
+		value=data.popleft() if otherSide == 0 else data.pop()
+		count+=1
+	if len(ending)==0 or ending[-1][0] != cur:
 		if count>0:
-			ending.append((cur[0], count))
+			ending.append((cur, count))
 	else:
-		ending[-1]=(ending[-1][0], ending[-1][1] + count)
+		ending[-1]=(ending[-1][0], ending[-1][1]+count)
 
 	if count==0:
-		if len(input)==0:
-			dataLength=0
+		if len(data)==0:
+			data=collections.deque()
 			for e in ending:
-				dataLength += e[1]
-			input=collections.deque(ending)
+				data.extend([e[0]]*e[1])
 			ending=[]
 			print('done no more data', round+1)
-			if len(input)==0:
+			if len(data)==0:
 				break
 
-		cur=input.popleft() if side == 0 else input.pop()
-		dataLength -= cur[1]
-		while len(input)>=1 and input[side][0]==cur[0]:
-			dataLength -= input[side][1]
-			input.popleft() if side == 0 else input.pop()
-
+		cur=data.popleft() if side == 0 else data.pop()
+		while len(data)>=1 and data[side]==cur:
+			data.popleft() if side == 0 else data.pop()
 
 		print('done', round+1)
 		continue
 
-	index = None
+	index2 = None
 	for i in range(len(ending)):
-		if ending[i][0]==cur[0]:
-			index = i
+		if ending[i][0]==cur:
+			index2 = i
 			break
-	width = sum(i[1] for i in ending[index:])
-	answer+= dataLength + width
-	ending=ending[:index]
+	width = sum(i[1] for i in ending[index2:])
+	answer+= len(data) + width
+	ending=ending[:index2]
 
 	round+=1
 	side=otherSide
 
 	if round%1000==0:
-		print('0', round, len(input), len(ending))
+		# print(round+1, ''.join(data if side==0 else reversed(data))+''.join(reversed(ending)))
+		print(round, len(data), len(ending))
 print(round, answer)
 sys.exit(0)
 
