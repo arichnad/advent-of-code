@@ -1,0 +1,201 @@
+#!/usr/bin/python3
+
+# noinspection PyUnresolvedReferences
+import math, re, sys, itertools, functools, copy, json, threading, random, heapq, time # list(itertools.permutations(range(4), 4)); itertools: product (like permutations with replacement.  repeat=N lets you use the same range multiple times), permutations, combinations, combinations_with_replacement. heapq.heappush(a, 3); d=copy.deepcopy(d)
+# from fractions import Fraction; Fraction(1, 3)
+# sort list in python3 with a comparator:  v.sort(key=functools.cmp_to_key(lambda a, b: -1 if (a, b) in g else 1 if (b, a) in g else 0))
+
+# you CANNOT copy venv directories.  use this instead:  sudo apt install pypy3-venv && pypy3 -m venv .venv
+# OR:  settings -> python -> interpreter -> add new -> /usr/bin/pypy3 -> add new -> virtual environment .venv based on pypy3
+# sudo apt install python3-dev pypy3-dev pypy3-venv libopenblas-dev gfortran libgeos-dev && .venv/bin/pip install sortedcontainers astar z3-solver lmfit sympy shapely
+sys.setrecursionlimit(100000)
+# from sortedcontainers import SortedList #SortedList('bat') + 'cat'
+# from astar import AStar #see astarExample.py
+# from collections import defaultdict, deque, Counter
+# from z3.z3 import * # s = Solver(); x = Real('x'); y = Real('y'); s.add([x <= 10, x >= 10]); print(s); MAYBE s.minimize(sum(params)); print(s.check()); if s.check()==z3.sat: print(int(str(s.model()[x]))) #Int is sometimes slow, but also sometimes Real doesn't give you what you want
+# from sympy import * # x,y=symbols('x y'); print(solve([x <= 10, x >= 10]))
+# import lmfit # try z3 or sympy first please
+# from shapely import Polygon #print(Polygon([(0,0),(1,0),(1,1)]).area)
+# from testtemplate import *
+
+data1='''
+
+'''.strip('\n').splitlines()
+data2='''
+
+'''.strip('\n').splitlines()
+data3='''
+
+'''.strip('\n').splitlines()
+
+data=data2
+# import fileinput # data=[a.strip('\n') for a in fileinput.input()]
+
+# data = [int(line) for line in data]; H=len(data)
+data = [[int(column) for column in re.findall('-?\d+', line)] for line in data]; W,H=len(data[0]),len(data)
+# data = [[int(column) for column in line] for line in data]; W,H=len(data[0]),len(data)
+# data = [[int(column) for column in line.split(',')] for line in data]; W,H=len(data[0]),len(data)
+# data = [[column for column in line] for line in data]; W,H=len(data[0]),len(data)
+# python threads are not real:  thread=threading.Thread(target=lambda line: print(line), args=(line)); thread.start(); thread.join() # does not run in parallel on separate cores
+
+lastX=0
+highestY={}
+answer=0
+for (x, y, width) in data:
+	yDone=0
+	for checkY in sorted(highestY.keys()):
+		checkX = highestY[checkY]
+		if checkY<=y:
+			answer+=(x-checkX-1)*(checkY-yDone)
+			del highestY[checkY]
+			yDone=checkY
+		else:
+			answer+=(x-checkX-1)*(y-yDone)
+			yDone=y
+			break
+	answer+=y*width
+
+	highestY[y]=x+width-1
+	print(x, y, answer)
+print(answer)
+
+# lastX=0
+# highestY={}
+# answer=0
+# for (x, y) in data:
+# 	yDone=0
+# 	for checkY in sorted(highestY.keys()):
+# 		checkX = highestY[checkY]
+# 		if checkY<=y:
+# 			answer+=(x-checkX-1)*(checkY-yDone)
+# 			del highestY[checkY]
+# 			yDone=checkY
+# 		else:
+# 			answer+=(x-checkX-1)*(y-yDone)
+# 			yDone=y
+# 			break
+# 	answer+=y
+#
+# 	highestY[y]=x
+# 	print(x, y, answer)
+# print(answer)
+# dir = (dir+4)%4
+# dx,dy = [(1,0),(0,1),(-1,0),(0,-1)][dir] # clockwise, starting right
+# dir = 1 if dy==1 else 3 if dx==0 else 0 if dx==1 else 2 # clockwise, starting right
+# dir = 'rdlu'.find(d.lower()) # clockwise, starting right
+# dir = ['right', 'down', 'left', 'up'].index(d.lower()) # clockwise, starting right
+# dir = '>v<^'.find(d.lower()) # clockwise, starting right
+
+# data = [[column for column in line] for line in data]
+# for j in range(H):
+# 	for i in range(W):
+# 		for dy in range(-1, 2):
+# 			for dx in range(-1, 2):
+# 				# if dx==0 and dy==0: continue
+# 				if abs(dx)+abs(dy)!=1: continue
+#
+# 				newY,newX=j+dy,i+dx
+# 				if newY<0 or newY>=H or newX<0 or newX>=W: continue
+#
+# for line in data: print(''.join(line))
+
+# bfs simple queue (sorting slows things down some, you can remove sort if costs go up by the same every round)
+# for j in range(H):
+# 	for i in range(W):
+# 		if data[j][i]=='S': startY,startX=j,i
+# 		if data[j][i]=='E': endY,endX=j,i
+# positions = [(0, (startY, startX))]
+# endPoint = (endY, endX)
+# costs={}
+# while len(positions) > 0:
+# 	# print(len(positions))
+# 	newPositions = []
+# 	for (cost, point) in sorted(positions): # remove sorted here if cost goes up by the same every round
+# 		(y, x) = point
+#
+# 		costKey = point
+# 		if costKey in costs and cost >= costs[costKey]: continue # change >= here to > if you need to analyze ties
+# 		costs[costKey] = cost
+#
+# 		for dy in range(-1, 2):
+# 			for dx in range(-1, 2):
+# 				# if dx==0 and dy==0: continue
+# 				if abs(dx)+abs(dy) != 1: continue
+# 				ny,nx = y+dy,x+dx
+# 				if ny < 0 or ny >= H or nx < 0 or nx >= W: continue
+# 				if data[ny][nx] == '#': continue
+#
+# 				newCost = cost + 1
+# 				newPoint = (ny, nx)
+#
+# 				if newPoint == endPoint:
+# 					print(newCost)
+# 					sys.exit(0)
+#
+# 				newPositions.append((newCost, newPoint))
+# 	positions=newPositions
+
+
+# bfs with a heap (fast sorting)
+# for j in range(H):
+# 	for i in range(W):
+# 		if data[j][i]=='S': startY,startX=j,i
+# 		if data[j][i]=='E': endY,endX=j,i
+# positions = [(0, (startY, startX))]
+# endPoint = (endY, endX)
+# costs={}
+# while len(positions) > 0:
+# 	(cost, point) = heapq.heappop(positions)
+# 	(y, x) = point
+#
+# 	costKey = point
+# 	if costKey in costs and cost >= costs[costKey]:
+# 		continue
+# 	costs[costKey] = cost
+#
+# 	for dy in range(-1, 2):
+# 		for dx in range(-1, 2):
+# 			# if dx==0 and dy==0: continue
+# 			if abs(dx)+abs(dy)!=1: continue
+# 			ny,nx = y+dy,x+dx
+# 			if ny < 0 or ny >= H or nx < 0 or nx >= W: continue
+# 			if data[ny][nx] == '#': continue
+#
+# 			newCost = cost+1
+# 			newPoint = (ny, nx)
+#
+# 			if newPoint==endPoint:
+# 				print(newCost)
+# 				sys.exit(0)
+#
+# 			costKey = newPoint
+# 			if costKey in costs and newCost >= costs[costKey]: continue
+#
+# 			heapq.heappush(positions, (newCost, newPoint))
+
+# flood fill does NOT work when want a breadth first (minimum cost, that sort of thing)
+# for j in range(H):
+# 	for i in range(W):
+# 		if data[j][i]=='S': startY,startX=j,i
+# 		if data[j][i]=='E': endY,endX=j,i
+# visited=set()
+# def ff(point):
+# 	(y, x) = point
+# 	if (y, x) in visited: return 0
+# 	visited.add((y, x))
+#
+# 	answer=1
+# 	for dy in range(-1, 2):
+# 		for dx in range(-1, 2):
+# 			# if dx==0 and dy==0: continue
+# 			if abs(dx)+abs(dy)!=1: continue
+# 			ny,nx = y+dy,x+dx
+# 			if ny < 0 or ny >= H or nx < 0 or nx >= W: continue
+# 			if data[ny][nx] == '#': continue
+#
+# 			newPoint = (ny, nx)
+# 			answer+=ff(newPoint)
+# 	return answer
+#
+# print(ff((startY, startX), ))
+
