@@ -27,6 +27,9 @@ data2='''
 data3='''
 
 '''.strip('\n').splitlines()
+data4='''
+
+'''.strip('\n').splitlines()
 
 data=data1
 # import fileinput # data=[a.strip('\n') for a in fileinput.input()]
@@ -98,6 +101,7 @@ data=data1
 #
 # 				newPositions.append((newCost, newPoint))
 # 	positions=newPositions
+# print(costs[(endY, endX)])
 
 
 # bfs with a heap (fast sorting)
@@ -136,6 +140,7 @@ data=data1
 # 			if costKey in costs and newCost >= costs[costKey]: continue
 #
 # 			heapq.heappush(positions, (newCost, newPoint))
+# print(costs[(endY, endX)])
 
 # flood fill does NOT work when want a breadth first (minimum cost, that sort of thing)
 # for j in range(H):
